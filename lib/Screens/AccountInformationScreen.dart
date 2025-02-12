@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'CategoryScreen.dart';
-import 'cart_screen.dart'; // Import CartScreen
-// Import the ProfileScreen
+import 'package:myproject/Screens/DashboardScreen.dart';
+import 'package:myproject/Screens/EditEmailScreen.dart';
+import 'package:myproject/Screens/EditPasswordScreen%20.dart';
+import 'EditPhoneNumberScreen.dart';
+import 'EditUsernameScreen.dart';
 
 class AccountInformationScreen extends StatelessWidget {
   const AccountInformationScreen({super.key});
@@ -12,124 +14,72 @@ class AccountInformationScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        title: const Text(
+          "Account Information",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       backgroundColor: Colors.white,
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Account Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            _buildInfoRow(
+              context,
+              label: 'Username',
+              value: 'Jimmy',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditUsernameScreen()),
+                );
+              },
             ),
-            SizedBox(
-              height: 30,
+            const SizedBox(height: 40),
+            _buildInfoRow(
+              context,
+              label: 'Email',
+              value: 'jimmyjoseph02@gmail.com',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditEmailScreen()),
+                );
+              },
             ),
-            // Username Section
-            Text(
-              'Username',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            const SizedBox(height: 40),
+            _buildInfoRow(
+              context,
+              label: 'Phone Number',
+              value: '0710661252',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditPhoneNumberScreen()),
+                );
+              },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Jimmy',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Text(
-                  'Edit',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 40), // Space between Username and Email sections
-
-            // Email Section
-            Text(
-              'Email',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'jimmyjoseph02@gmail.com',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Text(
-                  'Edit',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 40), // Space between Email and Phone sections
-
-            // Phone Number Section
-            Text(
-              'Phone Number',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  '0710661252',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Text(
-                  'Edit',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-                height: 40), // Space between Phone Number and Password sections
-
-            // Password Section
-            Text(
-              'Password',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  '**************',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Text(
-                  'Edit',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+            const SizedBox(height: 40),
+            _buildInfoRow(
+              context,
+              label: 'Password',
+              value: '**************',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditPasswordScreen()),
+                );
+              },
             ),
           ],
         ),
       ),
-      // Add the BottomNavigationBar here
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 3, // Highlight the 'Account' section
         onTap: (index) {
@@ -137,12 +87,9 @@ class AccountInformationScreen extends StatelessWidget {
           if (index == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CategoryScreen()),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartScreen()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const DashboardScreen()), // Navigate to DashboardScreen
             );
           }
         },
@@ -169,6 +116,42 @@ class AccountInformationScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInfoRow(BuildContext context,
+      {required String label,
+      required String value,
+      required VoidCallback onTap}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              value,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: onTap,
+              child: const Text(
+                'Edit',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

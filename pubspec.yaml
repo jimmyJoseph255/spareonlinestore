@@ -38,6 +38,10 @@ dependencies:
   geolocator: ^13.0.2
   intl: ^0.20.1
   badges: ^3.0.0
+  google_maps_flutter: ^2.10.0
+  geocoding: ^3.0.0
+  carousel_slider: ^5.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +73,9 @@ flutter:
     - lib/images/Engine.png
     - lib/images/Brake.png
     - lib/images/tyre.png
-
+    - lib/images/delivery-african.jpg
+    - lib/images/deliveryman.png
+    - lib/images/side_mirror.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

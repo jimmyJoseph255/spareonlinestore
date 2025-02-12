@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FeedbackScreen extends StatefulWidget {
+  const FeedbackScreen({super.key});
+
   @override
   _FeedbackScreenState createState() => _FeedbackScreenState();
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   int rating = 0; // Variable to track the selected rating
-  TextEditingController _commentController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +66,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 200),
                     padding: EdgeInsets.all(8),
+                    transform: Matrix4.identity()
+                      ..scale(index < rating ? 1.2 : 1.0),
                     child: Icon(
                       index < rating ? Icons.star : Icons.star_border,
                       size: 40,
                       color: index < rating ? Colors.orangeAccent : Colors.grey,
-                    ),
-                    transform: Matrix4.identity()
-                      ..scale(index < rating ? 1.2 : 1.0), // Add scaling effect
+                    ), // Add scaling effect
                   ),
                 );
               }),

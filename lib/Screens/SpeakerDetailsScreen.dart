@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'cart_screen.dart'; // Import the CartScreen
-import 'tyredetailsinside.dart'; // Use the same inside screen for simplicity
+import 'package:myproject/Screens/DashboardScreen.dart';
+import 'package:myproject/Screens/FavoritesScreen.dart';
+import 'package:myproject/Screens/accountscreen.dart';
+import 'cart_screen.dart';
+import 'speakerdetailsinside.dart';
 
 class SpeakerDetailsScreen extends StatefulWidget {
   const SpeakerDetailsScreen({super.key});
@@ -10,43 +13,103 @@ class SpeakerDetailsScreen extends StatefulWidget {
 }
 
 class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
-  // List of speaker products
   final List<Map<String, String>> products = const [
     {
       'name': 'JBL Flip 5',
-      'price': '150 USD',
+      'price': '150',
       'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
     },
     {
       'name': 'Sony SRS-XB43',
-      'price': '200 USD',
+      'price': '200',
+      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+    },
+    {
+      'name': 'ABose SoundLink',
+      'price': '250',
       'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
     },
     {
       'name': 'Bose SoundLink',
-      'price': '250 USD',
+      'price': '50',
+      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+    },
+    {
+      'name': 'Bose SoundLink',
+      'price': '20',
+      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+    },
+    {
+      'name': 'Bose SoundLink',
+      'price': '20',
+      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+    },
+    {
+      'name': 'Bose SoundLink',
+      'price': '20',
+      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+    },
+    {
+      'name': 'Bose SoundLink',
+      'price': '20',
       'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
     },
   ];
 
-  int _selectedIndex = 0;
+  List<Map<String, String>> _sortedProducts = [];
+  final Set<Map<String, String>> _favoriteItems = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _sortedProducts = List.from(products);
+  }
+
+  void _sortProducts(String criteria) {
+    setState(() {
+      if (criteria == 'Alphabetical') {
+        _sortedProducts.sort((a, b) => a['name']!.compareTo(b['name']!));
+      } else if (criteria == 'Price') {
+        _sortedProducts.sort(
+            (a, b) => int.parse(a['price']!).compareTo(int.parse(b['price']!)));
+      }
+    });
+  }
+
+  void _toggleFavorite(Map<String, String> product) {
+    setState(() {
+      if (_favoriteItems.contains(product)) {
+        _favoriteItems.remove(product);
+      } else {
+        _favoriteItems.add(product);
+      }
+    });
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     if (index == 2) {
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CartScreen()),
-      );
+          context, MaterialPageRoute(builder: (context) => const CartScreen()));
+    } else if (index == 0) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()));
+    } else if (index == 3) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AccountScreen()));
+    } else if (index == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+          ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -60,7 +123,6 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white, // Set the background color to white
       body: Column(
         children: [
           Padding(
@@ -82,13 +144,16 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.sort),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.sort),
+                  onSelected: _sortProducts,
+                  color: Colors.white,
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                        value: 'Alphabetical', child: Text('Sort A-Z')),
+                    const PopupMenuItem(
+                        value: 'Price', child: Text('Sort by Price')),
+                  ],
                 ),
               ],
             ),
@@ -97,7 +162,7 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: GridView.builder(
-                itemCount: products.length,
+                itemCount: _sortedProducts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.8,
@@ -105,13 +170,14 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
                   mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = _sortedProducts[index];
+                  final isFavorite = _favoriteItems.contains(product);
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TyreDetailsInside(
+                          builder: (context) => SpeakerDetailsInside(
                             productName: product['name']!,
                             productPrice: product['price']!,
                             productImage: product['image']!,
@@ -120,41 +186,43 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
                       );
                     },
                     child: Card(
-                      color: Colors.white, // Set card background color to white
                       elevation: 2,
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Stack(
                         children: [
-                          Expanded(
-                            child: Image.network(
-                              product['image']!,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              product['name']!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Image.network(product['image']!,
+                                      fit: BoxFit.contain)),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  product['name']!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              product['price']!,
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  '${product['price']} USD',
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -167,7 +235,7 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: 0,
         onTap: _onItemTapped,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
@@ -175,7 +243,8 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
         backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: 'Favorites'),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'Cart'),
           BottomNavigationBarItem(

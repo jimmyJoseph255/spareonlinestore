@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/Screens/DashboardScreen.dart';
 import 'tyredetails.dart';
 import 'SpeakerDetailsScreen.dart'; // Import SpeakerDetailsScreen
 import 'BrakeDetailsScreen.dart'; // Import BrakeDetailsScreen
@@ -22,7 +23,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   final categories = [
     'Tyre',
     'Speakers',
-    'Brake System
+    'Brake System',
     'Side Mirror',
     'Engine', // Added Engine category
     'Clutch', // Added Clutch category
@@ -39,6 +40,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CartScreen()),
+      );
+    } else if (index == 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     }
   }

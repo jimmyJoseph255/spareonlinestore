@@ -18,7 +18,7 @@ class TyreDetailsInside extends StatefulWidget {
   State<TyreDetailsInside> createState() => _TyreDetailsInsideState();
 }
 
-class _TyreDetailsInsideState extends State<TyreDetailsInside> {
+class _TyreDetailsInsideState extends State<TyreDetailsInside>{
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -72,7 +72,7 @@ class _TyreDetailsInsideState extends State<TyreDetailsInside> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                onPressed: () {
+                onPressed: (){
                   // Add product to cart
                   cartItems.add({
                     'name': widget.productName,
@@ -80,11 +80,18 @@ class _TyreDetailsInsideState extends State<TyreDetailsInside> {
                     'image': widget.productImage,
                   });
 
+                  // Show snack bar
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Item added to cart!'),
                       duration: Duration(seconds: 2),
                     ),
+                  );
+
+                  // Automatically navigate to CartScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartScreen()),
                   );
                 },
                 child: const Text(
@@ -97,22 +104,6 @@ class _TyreDetailsInsideState extends State<TyreDetailsInside> {
               ),
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        showUnselectedLabels: true,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: 'Account'),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/NextScreen.dart';
+import 'package:myproject/Screens/PaymentSelectionScreen.dart';
 
 class DateSelectionScreen extends StatefulWidget {
   const DateSelectionScreen({super.key});
@@ -51,7 +52,7 @@ class _DateSelectionScreenState extends State<DateSelectionScreen> {
     }
   }
 
-  // Function to show the bottom sheet
+  // Inside your DateSelectionScreen class, update the _showBottomSheet method
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -70,24 +71,69 @@ class _DateSelectionScreenState extends State<DateSelectionScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                const Spacer(), // Push contents to the bottom
+                Container(
+                  height: 5,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 20),
+                ),
+                const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Close the bottom sheet
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NextScreen(
-                          paymentMethod: 'M-PESA', // Example payment method
-                          paymentIcon: Icons.monetization_on, // Example icon
-                        ),
-                      ),
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.black,
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Confirm Pending',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.pending,
+                                color: Colors.amber,
+                              ),
+                            ],
+                          ),
+                          content: const Text(
+                            'Please wait while your request is being processed.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                      },
                     );
+
+                    Future.delayed(const Duration(seconds: 3), () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentSelectionScreen(
+                            paymentMethod: 'M-PESA',
+                            paymentIcon: Icons.monetization_on,
+                          ),
+                        ),
+                      ).then((selectedPaymentMethod) {
+                        if (selectedPaymentMethod != null) {
+                          // Handle selected payment method here
+                          print(
+                              'Selected payment method: $selectedPaymentMethod');
+                        }
+                      });
+                    });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFA9411D), // Button color
-                    minimumSize:
-                        const Size(double.infinity, 60), // Increase size
+                    backgroundColor: const Color(0xFFA9411D),
+                    minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -99,33 +145,39 @@ class _DateSelectionScreenState extends State<DateSelectionScreen> {
                       const CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.person,
-                          color: Color(0xFFA9411D),
-                          size: 24,
-                        ),
+                        backgroundImage: AssetImage('lib/images/profile.jpg'),
                       ),
-                      const SizedBox(width: 15),
-                      const Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Sebastian Bennet\n',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Delivery guy',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                      const SizedBox(width: 10),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Sebastian Bennet',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          Text(
+                            'Delivery guy',
+                            style: TextStyle(color: Colors.grey, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.call,
+                            color: Colors.white,
+                          ),
+                          iconSize: 30,
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         ),
                       ),
                     ],
@@ -161,74 +213,71 @@ class _DateSelectionScreenState extends State<DateSelectionScreen> {
       ),
       body: Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Depart After',
-                          style: TextStyle(fontSize: 16)),
-                      ElevatedButton(
-                        onPressed: () => _pickDate('depart'),
-                        child: Text(
-                          _departAfterDate != null
-                              ? formattedDepartAfter!
-                              : 'Select Date',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Arrive By', style: TextStyle(fontSize: 16)),
-                      ElevatedButton(
-                        onPressed: () => _pickDate('arrive'),
-                        child: Text(
-                          _arriveByDate != null
-                              ? formattedArriveBy!
-                              : 'Select Date',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                const Text('Select Time:', style: TextStyle(fontSize: 16)),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: _pickTime,
-                  child: Text(_selectedTime.format(context)),
-                ),
-              ],
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                _showBottomSheet(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                textStyle: const TextStyle(fontSize: 18),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCard(
+                context,
+                "Depart After: ${_departAfterDate != null ? formattedDepartAfter! : 'Select Date'}",
+                Icons.calendar_today,
+                () => _pickDate('depart'),
               ),
-              child: const Text('Next'),
-            ),
-          ],
+              SizedBox(height: 20),
+              _buildCard(
+                context,
+                "Arrive By: ${_arriveByDate != null ? formattedArriveBy! : 'Select Date'}",
+                Icons.calendar_today,
+                () => _pickDate('arrive'),
+              ),
+              SizedBox(height: 20),
+              _buildCard(
+                context,
+                "Time: ${_selectedTime.format(context)}",
+                Icons.access_time,
+                _pickTime,
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  _showBottomSheet(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  minimumSize: const Size(double.infinity, 50),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+                child: const Text(
+                  'Click to Set',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCard(
+      BuildContext context, String title, IconData icon, VoidCallback onTap) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 5,
+      child: ListTile(
+        leading: Icon(icon, color: Colors.teal),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Raleway',
+            color: Colors.teal.shade900,
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.teal),
+        onTap: onTap,
       ),
     );
   }

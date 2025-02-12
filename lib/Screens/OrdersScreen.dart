@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/Screens/DashboardScreen.dart';
 import 'CategoryScreen.dart';
 import 'cart_screen.dart'; // Import CartScreen
-import 'profilescreen.dart'; // Import the ProfileScreen
+import 'accountscreen.dart'; // Import the ProfileScreen
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -44,7 +45,7 @@ class OrdersScreen extends StatelessWidget {
           if (index == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CategoryScreen()),
+              MaterialPageRoute(builder: (context) => const DashboardScreen()),
             );
           } else if (index == 2) {
             Navigator.push(
@@ -54,7 +55,7 @@ class OrdersScreen extends StatelessWidget {
           } else if (index == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              MaterialPageRoute(builder: (context) => const AccountScreen()),
             );
           }
         },

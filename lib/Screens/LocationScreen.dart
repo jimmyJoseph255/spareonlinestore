@@ -1,45 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'DateSelectionScreen.dart'; // Import the DateSelectionScreen
+import 'package:myproject/Screens/DateSelectionScreen.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({super.key});
 
   @override
-  _LocationScreenState createState() => _LocationScreenState();
+  State<LocationScreen> createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  String _currentLocation = 'Fetching location...';
-
-  Future<void> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      setState(() {
-        _currentLocation = 'Location services are disabled';
-      });
-      return;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        setState(() {
-          _currentLocation = 'Location permission denied';
-        });
-        return;
-      }
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    setState(() {
-      _currentLocation =
-          'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
-    });
-  }
+  late GoogleMapController _mapController;
+  LatLng myCurrentLocation = LatLng(-6.776012, 39.178326); // Default location
+  TextEditingController locationController = TextEditingController();
 
   @override
   void initState() {
@@ -47,50 +21,110 @@ class _LocationScreenState extends State<LocationScreen> {
     _getCurrentLocation();
   }
 
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      myCurrentLocation = LatLng(position.latitude, position.longitude);
+      locationController.text =
+          "${position.latitude}, ${position.longitude}"; // Update the input box
+      _mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: myCurrentLocation, zoom: 15),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Ensure the Scaffold background is white
-      appBar: AppBar(
-        title: const Text('Current Location'),
-        backgroundColor: Colors.white, // AppBar background set to white
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: Container(
-        color: Colors.white, // Ensure the Container background is white
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                _currentLocation,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+      appBar: AppBar(title: Text("Customer Location")),
+      body: Column(
+        children: [
+          Expanded(
+            child: GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: myCurrentLocation, zoom: 15),
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: locationController,
+                    decoration: InputDecoration(
+                      labelText: "Enter Current Location",
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100, // Light green color
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.location_on, color: Colors.green),
+                    onPressed: _getCurrentLocation,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  minimumSize: Size(50, 30), // Increase width and height
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20), // Increase padding
+                ),
                 onPressed: () {
-                  // Navigate to the DateSelectionScreen when the button is pressed
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DateSelectionScreen(),
-                    ),
+                        builder: (context) => const DateSelectionScreen()),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  minimumSize: Size(double.infinity, 50),
-                  textStyle: const TextStyle(fontSize: 18),
+                child: Text(
+                  "Next",
+                  style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                child: const Text('Next'),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

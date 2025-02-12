@@ -46,9 +46,9 @@ class TigoPesaScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsets>(
+                padding: WidgetStateProperty.all<EdgeInsets>(
                     EdgeInsets.symmetric(vertical: 16, horizontal: 100)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
               ),
               child: Text(
                 "DIAL *150*01*",

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/Screens/tyredetailsinside.dart';
-import 'cart_screen.dart'; // Import the CartScreen
-// Replace with the appropriate inside screen
+import 'package:myproject/Screens/DashboardScreen.dart';
+import 'package:myproject/Screens/FavoritesScreen.dart'; // Import the FavoritesScreen
+import 'package:myproject/Screens/accountscreen.dart';
+import 'cart_screen.dart';
+import 'enginedetailsinside.dart'; // Your engine details inside screen
 
 class EngineDetailsScreen extends StatefulWidget {
   const EngineDetailsScreen({super.key});
@@ -11,46 +13,89 @@ class EngineDetailsScreen extends StatefulWidget {
 }
 
 class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
-  // List of engine system products
   final List<Map<String, String>> products = const [
     {
       'name': 'Engine Part A',
       'price': '200 USD',
       'image':
-          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain', // Replace with actual image URL
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
     },
     {
       'name': 'Engine Part B',
       'price': '300 USD',
       'image':
-          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain', // Replace with actual image URL
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
     },
     {
       'name': 'Engine Part C',
       'price': '450 USD',
       'image':
-          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain', // Replace with actual image URL
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
+    },
+    {
+      'name': 'Engine Part C',
+      'price': '200 USD',
+      'image':
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
+    },
+    {
+      'name': 'Engine Part C',
+      'price': '450 USD',
+      'image':
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
+    },
+    {
+      'name': 'Engine Part C',
+      'price': '40 USD',
+      'image':
+          'https://th.bing.com/th/id/OIP.AVdXQ4qKtnGcqpP02_iXjAHaGu?rs=1&pid=ImgDetMain',
     },
   ];
 
-  int _selectedIndex = 0;
+  List<Map<String, String>> _sortedProducts = [];
+  final Set<Map<String, String>> _favoriteItems = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _sortedProducts = List.from(products);
+  }
+
+  void _sortProducts(String criteria) {
+    setState(() {
+      if (criteria == 'Alphabetical') {
+        _sortedProducts.sort((a, b) => a['name']!.compareTo(b['name']!));
+      } else if (criteria == 'Price') {
+        _sortedProducts.sort((a, b) => int.parse(a['price']!.split(' ')[0])
+            .compareTo(int.parse(b['price']!.split(' ')[0])));
+      }
+    });
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     if (index == 2) {
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CartScreen()),
-      );
+          context, MaterialPageRoute(builder: (context) => const CartScreen()));
+    } else if (index == 0) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()));
+    } else if (index == 3) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AccountScreen()));
+    } else if (index == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+          ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -64,7 +109,6 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white, // Set the background color to white
       body: Column(
         children: [
           Padding(
@@ -86,13 +130,16 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.sort),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.sort),
+                  onSelected: _sortProducts,
+                  color: Colors.white,
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                        value: 'Alphabetical', child: Text('Sort A-Z')),
+                    const PopupMenuItem(
+                        value: 'Price', child: Text('Sort by Price')),
+                  ],
                 ),
               ],
             ),
@@ -101,7 +148,7 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: GridView.builder(
-                itemCount: products.length,
+                itemCount: _sortedProducts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.8,
@@ -109,13 +156,13 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
                   mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = _sortedProducts[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TyreDetailsInside(
+                          builder: (context) => EngineDetailsInside(
                             productName: product['name']!,
                             productPrice: product['price']!,
                             productImage: product['image']!,
@@ -124,8 +171,8 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
                       );
                     },
                     child: Card(
-                      color: Colors.white, // Set card background color to white
                       elevation: 2,
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -171,7 +218,7 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: 0,
         onTap: _onItemTapped,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
@@ -179,7 +226,8 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
         backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: 'Favorites'),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'Cart'),
           BottomNavigationBarItem(

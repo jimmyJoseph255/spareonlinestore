@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:myproject/Screens/FeedBackScreen.dart';
 
 class OrderStatusScreen extends StatefulWidget {
+  const OrderStatusScreen({super.key});
+
   @override
   _OrderStatusScreenState createState() => _OrderStatusScreenState();
 }
@@ -94,7 +96,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
             _buildStepCircle(isCompleted),
             if (!isLast)
               // Animated Line
-              Container(
+              SizedBox(
                 width: 50, // Fixed width for the line
                 child: AnimatedContainer(
                   duration: Duration(seconds: 1),

@@ -4,6 +4,7 @@ import 'package:myproject/Screens/DateSelectionScreen.dart';
 import 'package:myproject/Screens/HaloPesaScreen.dart';
 import 'package:myproject/Screens/TigoPesaScreen.dart';
 import 'package:myproject/Screens/MpesaScreen.dart';
+import 'PaymentSelectionScreen.dart'; // Import PaymentSelectionScreen
 
 class NextScreen extends StatelessWidget {
   final String paymentMethod;
@@ -21,11 +22,15 @@ class NextScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // When user presses back, they will go back to the PaymentScreen,
-            // and the previous selection will be cleared
+            // When user presses back, navigate to the PaymentSelectionScreen
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => DateSelectionScreen()),
+              MaterialPageRoute(
+                  builder: (context) => PaymentSelectionScreen(
+                        paymentMethod:
+                            'Selected Payment', // Set the payment method appropriately
+                        paymentIcon: Icons.payment, // Use an appropriate icon
+                      )),
             );
           },
         ),
@@ -35,20 +40,16 @@ class NextScreen extends StatelessWidget {
         padding: const EdgeInsets.all(30.0),
         child: Column(
           children: [
-            // Add space before the cards
-            const SizedBox(height: 100), // Add space here
-
-            // Display two rows of cards
+            const SizedBox(height: 100),
             Expanded(
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // M-PESA Card with color D2393D
+                      // M-PESA Card
                       GestureDetector(
                         onTap: () {
-                          // Navigate to M-PESA Screen when tapped
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -57,8 +58,7 @@ class NextScreen extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 5,
-                          color:
-                              const Color(0xFFD2393D), // Red color for M-PESA
+                          color: const Color(0xFFD2393D),
                           child: SizedBox(
                             width: 160,
                             height: 100,
@@ -69,10 +69,9 @@ class NextScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // AIRTEL MONEY Card with color D2393D
+                      // AIRTEL MONEY Card
                       GestureDetector(
                         onTap: () {
-                          // Navigate to AIRTEL MONEY Screen when tapped
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -81,8 +80,7 @@ class NextScreen extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 5,
-                          color: const Color(
-                              0xFFD2393D), // Red color for AIRTEL MONEY
+                          color: const Color(0xFFD2393D),
                           child: SizedBox(
                             width: 160,
                             height: 100,
@@ -99,10 +97,9 @@ class NextScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // TIGO PESA Card with color 005A9E
+                      // TIGO PESA Card
                       GestureDetector(
                         onTap: () {
-                          // Navigate to TigoPesaScreen when tapped
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -111,8 +108,7 @@ class NextScreen extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 5,
-                          color: const Color(
-                              0xFF005A9E), // Blue color for TIGO PESA
+                          color: const Color(0xFF005A9E),
                           child: SizedBox(
                             width: 160,
                             height: 100,
@@ -123,10 +119,9 @@ class NextScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // HALOPESA Card with color FF6666
+                      // HALOPESA Card
                       GestureDetector(
                         onTap: () {
-                          // Navigate to HALOPESA Screen when tapped
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -135,8 +130,7 @@ class NextScreen extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 5,
-                          color: const Color(
-                              0xFFFF6666), // Light Red color for HALOPESA
+                          color: const Color(0xFFFF6666),
                           child: SizedBox(
                             width: 160,
                             height: 100,

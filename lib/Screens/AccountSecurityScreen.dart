@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/Screens/EditPasswordScreen%20.dart';
 
 class AccountSecurityScreen extends StatelessWidget {
   const AccountSecurityScreen({super.key});
@@ -29,7 +30,11 @@ class AccountSecurityScreen extends StatelessWidget {
               icon: Icons.lock,
               title: 'Change Password',
               onTap: () {
-                // Handle Change Password functionality here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditPasswordScreen()),
+                );
               },
             ),
             const SizedBox(height: 10),

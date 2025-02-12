@@ -28,7 +28,7 @@ class Start extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Auto Spare Parts\nOnline Store',
+                    'Spare Parts Store',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 26,
@@ -40,12 +40,12 @@ class Start extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.0),
                     child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Interdum dictum tempus, interdum at dignissim metus. Ultricies sed nunc.',
+                      'Find quality spare parts for your vehicles and get them delivered directly to your doorstep. Explore our wide range of products designed to meet your needs.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -83,7 +83,7 @@ class Start extends StatelessWidget {
               ),
 
               // Bottom Illustration
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: Column(
                   children: [

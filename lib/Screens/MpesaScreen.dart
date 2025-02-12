@@ -40,10 +40,10 @@ class MpesaScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsets>(
+                padding: WidgetStateProperty.all<EdgeInsets>(
                     EdgeInsets.symmetric(
                         vertical: 16, horizontal: 100)), // Increase button size
-                backgroundColor: MaterialStateProperty.all<Color>(Color(
+                backgroundColor: WidgetStateProperty.all<Color>(Color(
                     0xFFD2393D)), // Set the background color of the button
               ),
               child: Text(
