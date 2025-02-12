@@ -104,8 +104,7 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+          builder: (context) => FavoritesScreen(),
         ),
       );
     }

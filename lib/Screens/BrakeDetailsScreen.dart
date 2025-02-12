@@ -98,8 +98,7 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+            builder: (context) => FavoritesScreen(),
           ));
     }
   }

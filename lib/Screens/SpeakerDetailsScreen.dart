@@ -100,8 +100,7 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+            builder: (context) => FavoritesScreen(),
           ));
     }
   }

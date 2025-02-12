@@ -18,7 +18,7 @@ class TyreDetailsInside extends StatefulWidget {
   State<TyreDetailsInside> createState() => _TyreDetailsInsideState();
 }
 
-class _TyreDetailsInsideState extends State<TyreDetailsInside>{
+class _TyreDetailsInsideState extends State<TyreDetailsInside> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -72,7 +72,7 @@ class _TyreDetailsInsideState extends State<TyreDetailsInside>{
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                onPressed: (){
+                onPressed: () {
                   // Add product to cart
                   cartItems.add({
                     'name': widget.productName,

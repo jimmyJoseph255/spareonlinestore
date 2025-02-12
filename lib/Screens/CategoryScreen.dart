@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
-import 'tyredetails.dart';
-import 'SpeakerDetailsScreen.dart'; // Import SpeakerDetailsScreen
-import 'BrakeDetailsScreen.dart'; // Import BrakeDetailsScreen
-import 'SideMirrorDetailsScreen.dart'; // Import SideMirrorDetailsScreen
-import 'EngineDetailsScreen.dart'; // Import EngineDetailsScreen (add this)
-import 'ClutchDetailsScreen.dart'; // Import ClutchDetailsScreen (updated this)
-import 'cart_screen.dart'; // Import CartScreen
+import 'package:myproject/Screens/SpeakerDetailsScreen.dart'; // Import SpeakerDetailsScreen
+import 'package:myproject/Screens/BrakeDetailsScreen.dart'; // Import BrakeDetailsScreen
+import 'package:myproject/Screens/SideMirrorDetailsScreen.dart'; // Import SideMirrorDetailsScreen
+import 'package:myproject/Screens/EngineDetailsScreen.dart'; // Import EngineDetailsScreen
+import 'package:myproject/Screens/ClutchDetailsScreen.dart';
+import 'package:myproject/Screens/cart_screen.dart';
+import 'package:myproject/Screens/tyredetails.dart'; // Import ClutchDetailsScreen
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({super.key});
-
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
@@ -25,8 +23,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Speakers',
     'Brake System',
     'Side Mirror',
-    'Engine', // Added Engine category
-    'Clutch', // Added Clutch category
+    'Engine',
+    'Clutch',
   ];
 
   // Handle the BottomNavigationBar item tap
@@ -61,20 +59,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: categories.length, // Number of categories
+          itemCount: categories.length,
           itemBuilder: (context, index) {
             return _categoryCard(context, index);
           },
         ),
       ),
-      // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, // Set the selected index
+        currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Colors.black, // Change selected icon color to black
-        unselectedItemColor:
-            Colors.black, // Change unselected icon color to black
-        backgroundColor: Colors.white, // Handle the tap event
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black,
+        backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -97,53 +93,52 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  // Category Card Widget
   Widget _categoryCard(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         if (categories[index] == 'Tyre') {
-          // Navigate to TyreDetailsScreen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const TyreDetailsScreen()),
+            MaterialPageRoute(
+              builder: (context) => TyreDetailsScreen(),
+            ),
           );
         } else if (categories[index] == 'Speakers') {
-          // Navigate to SpeakerDetailsScreen
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const SpeakerDetailsScreen()),
+              builder: (context) => SpeakerDetailsScreen(),
+            ),
           );
         } else if (categories[index] == 'Brake System') {
-          // Navigate to BrakeDetailsScreen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const BrakeDetailsScreen()),
+            MaterialPageRoute(
+              builder: (context) => BrakeDetailsScreen(),
+            ),
           );
         } else if (categories[index] == 'Side Mirror') {
-          // Navigate to SideMirrorDetailsScreen
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const SideMirrorDetailsScreen()),
+              builder: (context) => SideMirrorDetailsScreen(),
+            ),
           );
         } else if (categories[index] == 'Engine') {
-          // Navigate to EngineDetailsScreen
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const EngineDetailsScreen()),
+              builder: (context) => EngineDetailsScreen(),
+            ),
           );
         } else if (categories[index] == 'Clutch') {
-          // Navigate to ClutchDetailsScreen
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    const ClutchDetailsScreen()), // Navigate to ClutchDetailsScreen
+              builder: (context) => ClutchDetailsScreen(),
+            ),
           );
         } else {
-          // Show a SnackBar for other categories
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Clicked on ${categories[index]}')),
           );
@@ -151,11 +146,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
       },
       child: Card(
         elevation: 4.0,
-        color: Colors.white, // Set the card background color to white
+        color: Colors.white,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        margin: const EdgeInsets.symmetric(
-            vertical: 8.0), // Add margin for spacing between cards
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: ListTile(
           contentPadding: const EdgeInsets.all(16.0),
           title: Text(

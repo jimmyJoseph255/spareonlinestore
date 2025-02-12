@@ -86,8 +86,7 @@ class _EngineDetailsScreenState extends State<EngineDetailsScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                FavoritesScreen(favoriteItems: _favoriteItems.toList()),
+            builder: (context) => FavoritesScreen(),
           ));
     }
   }
