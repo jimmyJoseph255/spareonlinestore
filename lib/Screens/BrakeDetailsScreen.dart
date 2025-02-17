@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
 import 'package:myproject/Screens/FavoritesScreen.dart';
 import 'package:myproject/Screens/accountscreen.dart';
+import 'package:myproject/provider/favorite_provider.dart';
+import 'package:provider/provider.dart';
 import 'cart_screen.dart';
 import 'brakesystemdetailsinside.dart';
 
@@ -13,7 +17,7 @@ class BrakeDetailsScreen extends StatefulWidget {
 }
 
 class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
-  final List<Map<String, String>> products = const [
+  final List<Map<String, String>> brakes = const [
     {
       'name': 'Brake Pad Set A',
       'price': '50',
@@ -64,24 +68,45 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
     },
   ];
 
-  List<Map<String, String>> _sortedProducts = [];
-  final Set<Map<String, String>> _favoriteItems = {};
+  List<Map<String, String>> _filteredbrakes = [];
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _sortedProducts = List.from(products);
+    _filteredbrakes = List.from(brakes);
   }
 
-  void _sortProducts(String criteria) {
+  void _sortbrakes(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
-        _sortedProducts.sort((a, b) => a['name']!.compareTo(b['name']!));
+        _filteredbrakes.sort((a, b) => a['name']!.compareTo(b['name']!));
       } else if (criteria == 'Price') {
-        _sortedProducts.sort(
+        _filteredbrakes.sort(
             (a, b) => int.parse(a['price']!).compareTo(int.parse(b['price']!)));
       }
     });
+  }
+
+  void _searchbrakes(String query) {
+    setState(() {
+      _searchQuery = query;
+      _filteredbrakes = brakes
+          .where((brakes) =>
+              brakes['name']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  // Method to generate a random color
+  Color _generateRandomColor() {
+    final Random random = Random();
+    return Color.fromRGBO(
+      random.nextInt(256), // Red
+      random.nextInt(256), // Green
+      random.nextInt(256), // Blue
+      1.0, // Opacity
+    );
   }
 
   void _onItemTapped(int index) {
@@ -106,9 +131,9 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -128,6 +153,7 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    onChanged: _searchbrakes, // Update the search query
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       hintText: 'Search Brake Systems',
@@ -143,7 +169,7 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
                 const SizedBox(width: 10),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
-                  onSelected: _sortProducts,
+                  onSelected: _sortbrakes,
                   color: Colors.white,
                   itemBuilder: (context) => [
                     const PopupMenuItem(
@@ -158,66 +184,94 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                itemCount: _sortedProducts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) {
-                  final product = _sortedProducts[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BrakeSystemDetailsInside(
-                            productName: product['name']!,
-                            productPrice: product['price']!,
-                            productImage: product['image']!,
+              child: Consumer<FavoriteProvider>(
+                builder: (context, favoriteProvider, child) {
+                  return GridView.builder(
+                    itemCount: _filteredbrakes.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      final brakes = _filteredbrakes[index];
+                      final isFavorite = favoriteProvider.isFavorite(brakes);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BrakeSystemDetailsInside(
+                                productName: brakes['name']!,
+                                productPrice: brakes['price']!,
+                                productImage: brakes['image']!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          elevation: 2,
+                          color:
+                              _generateRandomColor(), // Assign a random color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Image.network(brakes['image']!,
+                                        fit: BoxFit.contain),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      brakes['name']!,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Text(
+                                      '${brakes['price']} USD',
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                bottom: 8,
+                                right: 2,
+                                child: IconButton(
+                                  icon: Icon(
+                                    isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    favoriteProvider.toggleFavorite(brakes);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
                     },
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              child: Image.network(product['image']!,
-                                  fit: BoxFit.contain)),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              product['name']!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              '${product['price']} USD',
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   );
                 },
               ),
@@ -233,9 +287,16 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
         showUnselectedLabels: true,
         backgroundColor: Colors.white,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favorites'),
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'Cart'),
           BottomNavigationBarItem(

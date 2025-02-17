@@ -42,6 +42,11 @@ dependencies:
   geocoding: ^3.0.0
   carousel_slider: ^5.0.0
   riverpod: ^2.6.1
+  confetti: ^0.8.0
+  google_fonts: ^6.2.1
+  animate_do: ^4.0.1
+  wave: ^0.2.2
+
 
 
 dev_dependencies:
@@ -77,6 +82,19 @@ flutter:
     - lib/images/delivery-african.jpg
     - lib/images/deliveryman.png
     - lib/images/side_mirror.png
+    - lib/images/cart1.png
+    - lib/images/splash.png
+    - lib/images/free delivery.png
+    - lib/images/car.png
+    - lib/images/car-wheel.png
+    - lib/images/product_tyre.png
+    - lib/images/speaker-filled-audio-tool.png
+    - lib/images/side-mirror.png
+    - lib/images/brakeicon.png
+    - lib/images/car-engine.png
+    - lib/images/clutch.png
+    - lib/images/car-battery.png
+    - lib/images/kenwood speakers.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

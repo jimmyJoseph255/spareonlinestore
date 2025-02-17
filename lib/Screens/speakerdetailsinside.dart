@@ -39,10 +39,10 @@ class _SpeakerDetailsInsideState extends State<SpeakerDetailsInside> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           'Speakers Details',

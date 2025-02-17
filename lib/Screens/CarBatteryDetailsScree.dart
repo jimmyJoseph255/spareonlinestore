@@ -9,14 +9,15 @@ import 'package:provider/provider.dart';
 import 'cart_screen.dart';
 import 'clutchdetailsinside.dart';
 
-class ClutchDetailsScreen extends StatefulWidget {
-  const ClutchDetailsScreen({super.key});
+class CarBatteryDetailsScreen extends StatefulWidget {
+  const CarBatteryDetailsScreen({super.key});
 
   @override
-  State<ClutchDetailsScreen> createState() => _ClutchDetailsScreenState();
+  State<CarBatteryDetailsScreen> createState() =>
+      _CarBatteryDetailsScreenState();
 }
 
-class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
+class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
   final List<Map<String, String>> clutch = const [
     {
       'name': 'Clutch Plate A',

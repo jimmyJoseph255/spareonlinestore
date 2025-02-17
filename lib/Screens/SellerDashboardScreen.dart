@@ -43,10 +43,9 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
       appBar: _selectedIndex == 0
           ? AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 67, 164, 243),
               elevation: 0,
               iconTheme: const IconThemeData(color: Colors.black),
               title: Row(
@@ -100,13 +99,14 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
           ? Drawer(
               child: Container(
                 // Wrap the Drawer content with a Container
-                color: Colors.white, // Set background color to white
+                color: Color.fromARGB(
+                    255, 67, 164, 243), // Set background color to white
                 child: ListView(
                   children: [
                     DrawerHeader(
                       decoration: BoxDecoration(
-                          color:
-                              const Color(0xFFED1CF1)), // Retain header color
+                        color: Color.fromARGB(255, 255, 238, 0),
+                      ), // Retain header color
                       child: Row(
                         children: [
                           const CircleAvatar(
@@ -123,7 +123,8 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                     ),
                     // Dashboard Row with Icon and Text
                     ListTile(
-                      leading: const Icon(Icons.dashboard, color: Colors.grey),
+                      leading: const Icon(Icons.dashboard,
+                          color: Color.fromARGB(255, 0, 0, 0)),
                       title: const Text('Dashboard',
                           style: TextStyle(fontSize: 16)),
                       onTap: () {
@@ -162,7 +163,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SellerReportScreen()),
+                            builder: (context) => SellerReportScreen()),
                       );
                     }),
                     _buildMenuItem(Icons.notifications, 'Notifications', () {
@@ -190,11 +191,22 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
+        backgroundColor: Color.fromARGB(255, 75, 167, 241),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Account',
+          ),
         ],
       ),
     );
@@ -203,7 +215,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
   // Function to build menu items with icons and text
   Widget _buildMenuItem(IconData icon, String title, [VoidCallback? onTap]) {
     return ListTile(
-      leading: Icon(icon, color: Colors.grey), // Change to grey color
+      leading: Icon(icon, color: Colors.black), // Change to grey color
       title: Text(title, style: const TextStyle(fontSize: 16)),
       onTap: onTap ?? () {},
     );
@@ -216,8 +228,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Colors.white, // Set background color of HomeScreen to white
+      backgroundColor: const Color.fromARGB(
+          255, 67, 164, 243), // Set background color of HomeScreen to white
       body: ListView(
         children: [
           Padding(
@@ -225,18 +237,25 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               children: [
                 const Text(
-                  'Products',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  'Add Products',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
                 IconButton(
-                  icon:
-                      const Icon(Icons.add_circle_outline, color: Colors.blue),
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    color: Color.fromARGB(255, 58, 243, 33),
+                    size: 40, // Adjust the size as needed
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AddProductScreen()),
+                        builder: (context) => const AddProductScreen(),
+                      ),
                     );
                   },
                 ),
@@ -267,7 +286,8 @@ class HomeScreen extends StatelessWidget {
       height: 90,
       margin: const EdgeInsets.only(bottom: 20),
       child: Card(
-        color: Colors.white, // Set card color to white
+        color:
+            const Color.fromARGB(255, 255, 251, 0), // Set card color to white
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: InkWell(

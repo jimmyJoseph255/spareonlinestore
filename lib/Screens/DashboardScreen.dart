@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/refundcreen.dart';
@@ -19,9 +20,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final PageController _pageController = PageController();
-  int _currentPage = 0;
   int _selectedIndex = 0;
-  //Set<Map<String, String>> favorites = {}; // Use a Set to store favorites
   List<Map<String, String>> _favorites = [];
 
   final List<String> _carouselImages = [
@@ -47,28 +46,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final favoriteProvider = FavoriteProvider.of(context, listen: false);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: _buildAppBar(),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const SizedBox(height: 20),
-              _buildCarousel(),
-              const SizedBox(height: 40),
-              _buildMenuButtons(),
-              const SizedBox(height: 20),
-              _buildSuggestionsSection(),
-            ],
+      body: Container(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const SizedBox(height: 20),
+                _buildCarouselSlider(),
+                const SizedBox(height: 40),
+                _buildMenuButtons(),
+                const SizedBox(height: 20),
+                _buildSuggestionsSection(),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 91, 141, 182),
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -87,25 +89,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
             );
           }
         },
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        backgroundColor: Colors.white,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        //color: Colors.blue,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+            backgroundColor: Color.fromARGB(255, 75, 167, 241),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Add to Cart',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Account',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
         ],
       ),
@@ -169,20 +175,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _menuButton('Category', Icons.menu, Colors.green, CategoryScreen()),
-          _menuButton(
-              'Favorite', Icons.star_border, Colors.red, FavoritesScreen()),
-          _menuButton(
-              'Refund', Icons.monetization_on, Colors.blue, RefundScreen()),
+          GestureDetector(
+            onTap: () {},
+            child: _menuButton(
+                'Category', Icons.menu, Colors.green, CategoryScreen()),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: _menuButton(
+                'Favorite', Icons.star_border, Colors.red, FavoritesScreen()),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: _menuButton(
+                'Refund', Icons.monetization_on, Colors.blue, RefundScreen()),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCarousel() {
+  Widget _buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
-        height: MediaQuery.of(context).size.height * 0.25,
+        height: 200.0,
         enlargeCenterPage: true,
         autoPlay: true,
         aspectRatio: 16 / 9,
@@ -190,193 +206,421 @@ class _DashboardScreenState extends State<DashboardScreen> {
         viewportFraction: 0.8,
       ),
       items: [
-        {
-          'image': 'lib/images/Brake.png',
-          'title': 'Boda Stress!',
-          'text': 'High-Quality Brakes',
-          'buttonText': 'Order Now',
-          'screen': BrakeDetailsScreen(),
-        },
-        {
-          'image': 'lib/images/Engine.png',
-          'title': '',
-          'text': 'Powerful Engines',
-          'price': '\Tsh.500,000',
-          'buttonText': 'Courier Now',
-          'screen': EngineDetailsScreen(),
-        },
-        {
-          'image': 'lib/images/Engine.png',
-          'title': '',
-          'text': 'Durable Tyres',
-          'buttonText': 'Add to Cart',
-          'screen': EngineDetailsScreen(),
-        },
-        {
-          'image': '',
-          'title': '',
-          'text': '',
-          'buttonText': '',
-          'rightImage': 'lib/images/deliveryman.png',
-          'adText': 'Reliable Delivery at Your Doorstep',
-          'screen': null,
-        }
-      ].map((Map<String, dynamic> item) {
-        return GestureDetector(
+        // First carousel item with gradient (Brakes)
+        GestureDetector(
           onTap: () {
-            if (item['screen'] != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => item['screen']),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BrakeDetailsScreen()),
+            );
           },
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 252, 7, 101),
-                      Color.fromARGB(255, 34, 34, 34),
-                    ],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    stops: [0.3, 0.9],
-                    tileMode: TileMode.repeated,
-                  ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 175, 16, 77),
+                  Color.fromARGB(255, 34, 34, 34),
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: [0.3, 0.9],
+                tileMode: TileMode.repeated,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (item['title']!.isNotEmpty)
-                              Text(
-                                item['title']!,
-                                style: const TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.yellow,
-                                ),
-                              ),
-                            const SizedBox(height: 5),
-                            Text(
-                              item['text']!,
-                              style: const TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            if (item['text'] == 'Powerful Engines' &&
-                                item['price'] != null)
-                              Text(
-                                item['price']!,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.yellow,
-                                ),
-                              ),
-                            const SizedBox(height: 60),
-                            if (item['buttonText'] != null &&
-                                item['buttonText']!.isNotEmpty)
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text(
-                                  item['buttonText']!,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Stack(
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (item['image'] != null &&
-                              item['image']!.isNotEmpty)
-                            Positioned(
-                              left: 12,
-                              top: 30,
-                              child: Image.asset(
-                                item['image']!,
-                                height: 150,
-                                width: 220,
+                          Text(
+                            "Boda stress!",
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "High-Quality",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Brakes",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
                               ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              minimumSize: Size(0, 20),
                             ),
-                          if (item['rightImage'] != null &&
-                              item['rightImage']!.isNotEmpty)
-                            Positioned(
-                              left: 12,
-                              top: 30,
-                              child: Image.asset(
-                                item['rightImage']!,
-                                height: 150,
-                                width: 220,
-                              ),
+                            child: Text(
+                              'Order Now',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      'lib/images/Brake.png',
+                      height: 150,
+                      width: 130,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Second carousel item with gradient (Engine)
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EngineDetailsScreen()),
+            );
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 131, 131, 131),
+                  Color.fromARGB(255, 34, 34, 34),
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: [0.3, 0.9],
+                tileMode: TileMode.repeated,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Powerful",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Engine",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Ths.500,000",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              minimumSize: Size(0, 20),
+                            ),
+                            child: Text(
+                              'Courier Now',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      'lib/images/Engine.png',
+                      height: 150,
+                      width: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Third carousel item with gradient (Delivery)
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 25, 2, 88),
+                Color.fromARGB(255, 34, 34, 34),
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0.3, 0.9],
+              tileMode: TileMode.repeated,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
             ],
           ),
-        );
-      }).toList(),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Get your spare",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Delivery at your doorstep",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.yellow,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            minimumSize: Size(0, 20),
+                          ),
+                          child: Text(
+                            'Courier Now',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Image.asset(
+                    'lib/images/deliveryman.png',
+                    height: 250,
+                    width: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // Fourth carousel item with gradient (Delivery)
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 248, 2, 2),
+                Color.fromARGB(255, 248, 2, 2),
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0.3, 0.9],
+              tileMode: TileMode.repeated,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Get your spare",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Delivery at your doorstep",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.yellow,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            minimumSize: Size(0, 20),
+                          ),
+                          child: Text(
+                            'Courier Now',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Image.asset(
+                    'lib/images/deliveryman.png',
+                    height: 250,
+                    width: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _menuButton(String text, IconData icon, Color color, Widget nextPage) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: color,
-          radius: 28,
-          child: IconButton(
-            icon: Icon(
-              icon,
-              color: Colors.white,
+    return BounceIn(
+      duration: const Duration(milliseconds: 500), // Adjust the duration
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => nextPage),
+          );
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              backgroundColor: color,
+              radius: 28,
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => nextPage),
-              );
-            },
-          ),
+            const SizedBox(height: 5),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 5),
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -411,6 +655,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Center(
                   child: _suggestionItem('lib/images/Brake.png', 'Brake Discs',
                       '-50%', BrakeDetailsScreen())),
+              Center(
+                  child: _suggestionItem('lib/images/Brake.png', 'Brake Discs',
+                      '-50%', BrakeDetailsScreen())),
+              Center(
+                  child: _suggestionItem('lib/images/Brake.png', 'Brake Discs',
+                      '-50%', BrakeDetailsScreen())),
             ],
           ),
         ),
@@ -434,16 +684,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         width: 160,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+            borderRadius: BorderRadius.circular(16), color: Colors.yellow),
         child: Stack(
           children: [
             Column(

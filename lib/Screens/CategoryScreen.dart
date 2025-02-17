@@ -1,164 +1,309 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/Screens/DashboardScreen.dart';
-import 'package:myproject/Screens/SpeakerDetailsScreen.dart'; // Import SpeakerDetailsScreen
-import 'package:myproject/Screens/BrakeDetailsScreen.dart'; // Import BrakeDetailsScreen
-import 'package:myproject/Screens/SideMirrorDetailsScreen.dart'; // Import SideMirrorDetailsScreen
-import 'package:myproject/Screens/EngineDetailsScreen.dart'; // Import EngineDetailsScreen
-import 'package:myproject/Screens/ClutchDetailsScreen.dart';
-import 'package:myproject/Screens/cart_screen.dart';
-import 'package:myproject/Screens/tyredetails.dart'; // Import ClutchDetailsScreen
+import 'package:carousel_slider/carousel_slider.dart'; // Import CarouselSlider
+import 'package:myproject/Screens/ChooseBrakeSystemDetails.dart';
+import 'package:myproject/Screens/ChooseCarBatteryDetails.dart';
+import 'package:myproject/Screens/ChooseClutchDetails.dart';
+import 'package:myproject/Screens/ChooseEngineDetails.dart';
+import 'package:myproject/Screens/ChooseSideMirrorDetails.dart';
+import 'package:myproject/Screens/ChooseSpeakerDetails.dart';
+import 'package:myproject/Screens/choosetyredetails.dart';
+import 'SpeakerDetailsScreen.dart';
+import 'SideMirrorDetailsScreen.dart';
+import 'BrakeDetailsScreen.dart';
+import 'EngineDetailsScreen.dart';
+import 'ClutchDetailsScreen.dart';
+import 'tyredetails.dart';
 
-class CategoryScreen extends StatefulWidget {
-  @override
-  _CategoryScreenState createState() => _CategoryScreenState();
-}
-
-class _CategoryScreenState extends State<CategoryScreen> {
-  // Track the selected index of the BottomNavigationBar
-  int _selectedIndex = 0;
-
-  // List of categories
-  final categories = [
-    'Tyre',
-    'Speakers',
-    'Brake System',
-    'Side Mirror',
-    'Engine',
-    'Clutch',
+class CategoryScreen extends StatelessWidget {
+  // List of category names, icons, and background colors
+  final categoryData = [
+    {
+      'name': 'Car-Tyre',
+      'icon': 'lib/images/product_tyre.png',
+      'color': Colors.red
+    },
+    {
+      'name': 'Speakers',
+      'icon': 'lib/images/speaker-filled-audio-tool.png',
+      'color': Colors.green
+    },
+    {
+      'name': 'Brake System',
+      'icon': 'lib/images/brakeicon.png',
+      'color': Colors.orange
+    },
+    {
+      'name': 'Side Mirror',
+      'icon': 'lib/images/side-mirror.png',
+      'color': const Color.fromARGB(255, 10, 6, 238)
+    },
+    {
+      'name': 'Engine',
+      'icon': 'lib/images/car-engine.png',
+      'color': Colors.purple
+    },
+    {'name': 'Clutch', 'icon': 'lib/images/clutch.png', 'color': Colors.yellow},
+    {
+      'name': 'Battery',
+      'icon': 'lib/images/car-battery.png',
+      'color': Colors.brown
+    },
+    {'name': 'Suspension', 'icon': Icons.directions_car, 'color': Colors.teal},
+    {
+      'name': 'Exhaust',
+      'icon': Icons.filter_tilt_shift,
+      'color': Colors.deepOrange
+    },
   ];
 
-  // Handle the BottomNavigationBar item tap
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    // Navigate to the Cart Screen when the cart icon is tapped
-    if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CartScreen()),
-      );
-    } else if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
-      );
-    }
+  // Function to build the carousel slider
+  Widget _buildCarouselSlider(BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 200.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        aspectRatio: 16 / 9,
+        enableInfiniteScroll: true,
+        viewportFraction: 0.8,
+      ),
+      items: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BrakeDetailsScreen()),
+            );
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 175, 16, 77),
+                  Color.fromARGB(255, 34, 34, 34),
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: [0.3, 0.9],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Boda stress!",
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "High-Quality",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Brakes",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              minimumSize: Size(0, 20),
+                            ),
+                            child: Text(
+                              'Order Now',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      'lib/images/Brake.png',
+                      height: 150,
+                      width: 130,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        title: const Text('Categories', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: const Text('Category'),
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return _categoryCard(context, index);
-          },
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Account',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _categoryCard(BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () {
-        if (categories[index] == 'Tyre') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TyreDetailsScreen(),
-            ),
-          );
-        } else if (categories[index] == 'Speakers') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SpeakerDetailsScreen(),
-            ),
-          );
-        } else if (categories[index] == 'Brake System') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BrakeDetailsScreen(),
-            ),
-          );
-        } else if (categories[index] == 'Side Mirror') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SideMirrorDetailsScreen(),
-            ),
-          );
-        } else if (categories[index] == 'Engine') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EngineDetailsScreen(),
-            ),
-          );
-        } else if (categories[index] == 'Clutch') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ClutchDetailsScreen(),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Clicked on ${categories[index]}')),
-          );
-        }
-      },
-      child: Card(
-        elevation: 4.0,
-        color: Colors.white,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(16.0),
-          title: Text(
-            categories[index],
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildCarouselSlider(context), // Use the carousel slider
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 24.0,
+                    mainAxisSpacing: 24.0,
+                  ),
+                  itemCount: categoryData.length,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final category = categoryData[index];
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (category['name'] == 'Car-Tyre') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChooseTyreDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Speakers') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChooseSpeakerDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Side Mirror') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChooseSideMirrorDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Brake System') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChooseBrakeSystemDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Engine') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChooseEngineDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Clutch') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChooseClutchDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Battery') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChooseCarBatteryDetails(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content:
+                                        Text('${category['name']} Pressed')),
+                              );
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: category['color'] as Color?,
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            width: 90,
+                            height: 80,
+                            child: Center(
+                              child: category['icon'] is String
+                                  ? Image.asset(
+                                      category['icon'] as String,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Icon(
+                                      category['icon'] as IconData,
+                                      color: Colors.white,
+                                      size: 30.0,
+                                    ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          category['name'] as String,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart'; // Animation package
 import 'CustomerScreen.dart';
 import 'SellerLoginPageScreen.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
@@ -8,123 +11,222 @@ class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set Scaffold background color to white
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Spacing
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
+        children: [
+          // Background Gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF0072FF),
+                  Color(0xFF16AFDA),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(height: 200), // Space from the top
-
-                // "Click as Customer" Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to CustomerScreen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CustomerScreen(),
+                // Creative Header Section
+                Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: FadeInDown(
+                    duration: const Duration(seconds: 1),
+                    child: Column(
+                      children: const [
+                        Text(
+                          'Welcome!',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(250, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Click as Customer',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Choose your role to get started',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 255, 251, 0),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
 
-                // "OR" Text
-                const Center(
-                  child: Text(
-                    'OR',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                // Buttons Section
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 50),
 
-                // "Click as Seller" Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to SellerScreen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SellerLoginPageScreen(),
+                    // Click as Customer Button
+                    SlideInLeft(
+                      duration: const Duration(seconds: 1),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CustomerScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 250,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.person, color: Colors.blueAccent),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Click as Customer',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(250, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      'Click as Seller',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
+
+                    // OR with Divider Line
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Divider(
+                                color: Colors.white,
+                                thickness: 1,
+                                indent: 40,
+                                endIndent: 10),
+                          ),
+                          const Text(
+                            'OR',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                                color: Colors.white,
+                                thickness: 1,
+                                indent: 10,
+                                endIndent: 40),
+                          ),
+                        ],
                       ),
                     ),
+
+                    // Click as Seller Button
+                    SlideInRight(
+                      duration: const Duration(seconds: 2),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const SellerLoginPageScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 250,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.store, color: Colors.blueAccent),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Click as Seller',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Bottom Wave Animation
+                Container(
+                  height: 100,
+                  width: double.infinity,
+                  child: WaveWidget(
+                    config: CustomConfig(
+                      gradients: [
+                        [Colors.white, Colors.white70],
+                        [Colors.white70, Colors.white54],
+                      ],
+                      durations: [5000, 4000],
+                      heightPercentages: [0.20, 0.23],
+                      blur: MaskFilter.blur(BlurStyle.solid, 5),
+                    ),
+                    waveAmplitude: 10,
+                    size: const Size(double.infinity, double.infinity),
                   ),
                 ),
               ],
             ),
-
-            // Bottom Image and Design
-            Container(
-              color: Colors.white, // Ensures the bottom background is white
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Image.asset(
-                    'lib/images/img.png', // Replace with your image path
-                    width: 300,
-                    height: 180,
-                    fit: BoxFit.contain,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50),
-                        topRight: Radius.circular(50),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

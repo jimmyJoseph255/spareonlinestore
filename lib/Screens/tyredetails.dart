@@ -1,3 +1,4 @@
+import 'dart:math'; // Import the math library for Random
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/speakerdetailsinside.dart';
 import 'package:myproject/provider/favorite_provider.dart';
@@ -80,8 +81,11 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
       if (criteria == 'Alphabetical') {
         _filteredTyres.sort((a, b) => a['name']!.compareTo(b['name']!));
       } else if (criteria == 'Price') {
-        _filteredTyres.sort(
-            (a, b) => int.parse(a['price']!).compareTo(int.parse(b['price']!)));
+        _filteredTyres.sort((a, b) {
+          int priceA = int.tryParse(a['price']!) ?? 0;
+          int priceB = int.tryParse(b['price']!) ?? 0;
+          return priceA.compareTo(priceB);
+        });
       }
     });
   }
@@ -112,12 +116,23 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
     }
   }
 
+  // Method to generate a random color
+  Color _generateRandomColor() {
+    final Random random = Random();
+    return Color.fromRGBO(
+      random.nextInt(256), // Red
+      random.nextInt(256), // Green
+      random.nextInt(256), // Blue
+      1.0, // Opacity
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -146,7 +161,7 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: Colors.white,
                     ),
                   ),
                 ),
@@ -196,7 +211,8 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
                         },
                         child: Card(
                           elevation: 2,
-                          color: Colors.white,
+                          color:
+                              _generateRandomColor(), // Assign a random color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -226,7 +242,7 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
                                     child: Text(
                                       '${tyre['price']} USD',
                                       style: const TextStyle(
-                                        color: Colors.blue,
+                                        color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -267,15 +283,24 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
         showUnselectedLabels: true,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favorites'),
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Color.fromARGB(255, 67, 164, 243)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
+              icon: Icon(Icons.favorite),
+              label: 'Favorites',
+              backgroundColor: Color.fromARGB(255, 67, 164, 243)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: 'Account'),
+              icon: Icon(Icons.shopping_cart),
+              label: 'Cart',
+              backgroundColor: Color.fromARGB(255, 67, 164, 243)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Account',
+              backgroundColor: Color.fromARGB(255, 67, 164, 243)),
         ],
       ),
     );

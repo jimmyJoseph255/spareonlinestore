@@ -1,7 +1,11 @@
+import 'dart:math'; // Import the math library for Random
+
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
 import 'package:myproject/Screens/FavoritesScreen.dart';
 import 'package:myproject/Screens/accountscreen.dart';
+import 'package:myproject/provider/favorite_provider.dart';
+import 'package:provider/provider.dart';
 import 'cart_screen.dart';
 import 'speakerdetailsinside.dart';
 
@@ -13,76 +17,84 @@ class SpeakerDetailsScreen extends StatefulWidget {
 }
 
 class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
-  final List<Map<String, String>> products = const [
+  final List<Map<String, String>> speakers = const [
     {
       'name': 'JBL Flip 5',
       'price': '150',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://th.bing.com/th/id/R.f19761431de46d6175de8fa4b748cc0a?rik=bCE9qwf2mKHjxA&pid=ImgRaw&r=0'
     },
     {
       'name': 'Sony SRS-XB43',
       'price': '200',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://pluspng.com/img-png/car-audio-png-kenwood-car-audio-580.png'
     },
     {
       'name': 'ABose SoundLink',
       'price': '250',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://th.bing.com/th/id/R.f19761431de46d6175de8fa4b748cc0a?rik=bCE9qwf2mKHjxA&pid=ImgRaw&r=0'
     },
     {
       'name': 'Bose SoundLink',
       'price': '50',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://th.bing.com/th/id/R.f19761431de46d6175de8fa4b748cc0a?rik=bCE9qwf2mKHjxA&pid=ImgRaw&r=0'
     },
     {
       'name': 'Bose SoundLink',
       'price': '20',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://th.bing.com/th/id/R.f19761431de46d6175de8fa4b748cc0a?rik=bCE9qwf2mKHjxA&pid=ImgRaw&r=0'
     },
     {
       'name': 'Bose SoundLink',
       'price': '20',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://pngpix.com/images/hd/vehicle-subwoofer-png-gix-34ja8lvnwhu1izo9.jpg'
     },
     {
       'name': 'Bose SoundLink',
       'price': '20',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://th.bing.com/th/id/R.fb7bad61b6bd7cf68a50d959b6466b06?rik=BqlFx7trAXDpeg&riu=http%3a%2f%2fpngimg.com%2fuploads%2faudio_speakers%2faudio_speakers_PNG11120.png&ehk=Db5CVCQcS0%2fH%2bEytk9x%2bZyfTcBlnhNp0KgeHAmdgeKs%3d&risl=&pid=ImgRaw&r=0'
     },
     {
       'name': 'Bose SoundLink',
       'price': '20',
-      'image': 'https://m.media-amazon.com/images/I/818rupP5TWL.jpg',
+      'image':
+          'https://pngpix.com/images/hd/vehicle-subwoofer-png-gix-34ja8lvnwhu1izo9.jpg'
     },
   ];
 
-  List<Map<String, String>> _sortedProducts = [];
-  final Set<Map<String, String>> _favoriteItems = {};
+  List<Map<String, String>> _filteredSpeakers = [];
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _sortedProducts = List.from(products);
+    _filteredSpeakers = List.from(speakers);
   }
 
-  void _sortProducts(String criteria) {
+  void _sortSpeakers(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
-        _sortedProducts.sort((a, b) => a['name']!.compareTo(b['name']!));
+        _filteredSpeakers.sort((a, b) => a['name']!.compareTo(b['name']!));
       } else if (criteria == 'Price') {
-        _sortedProducts.sort(
+        _filteredSpeakers.sort(
             (a, b) => int.parse(a['price']!).compareTo(int.parse(b['price']!)));
       }
     });
   }
 
-  void _toggleFavorite(Map<String, String> product) {
+  void _searchSpeakers(String query) {
     setState(() {
-      if (_favoriteItems.contains(product)) {
-        _favoriteItems.remove(product);
-      } else {
-        _favoriteItems.add(product);
-      }
+      _searchQuery = query;
+      _filteredSpeakers = speakers
+          .where((speaker) =>
+              speaker['name']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     });
   }
 
@@ -97,20 +109,28 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const AccountScreen()));
     } else if (index == 1) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FavoritesScreen(),
-          ));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FavoritesScreen()));
     }
+  }
+
+  // Method to generate a random color
+  Color _generateRandomColor() {
+    final Random random = Random();
+    return Color.fromRGBO(
+      random.nextInt(256), // Red
+      random.nextInt(256), // Green
+      random.nextInt(256), // Blue
+      1.0, // Opacity
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -138,14 +158,15 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: Color.fromARGB(255, 255, 255, 255),
                     ),
+                    onChanged: _searchSpeakers,
                   ),
                 ),
                 const SizedBox(width: 10),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
-                  onSelected: _sortProducts,
+                  onSelected: _sortSpeakers,
                   color: Colors.white,
                   itemBuilder: (context) => [
                     const PopupMenuItem(
@@ -160,72 +181,93 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                itemCount: _sortedProducts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) {
-                  final product = _sortedProducts[index];
-                  final isFavorite = _favoriteItems.contains(product);
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SpeakerDetailsInside(
-                            productName: product['name']!,
-                            productPrice: product['price']!,
-                            productImage: product['image']!,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                  child: Image.network(product['image']!,
-                                      fit: BoxFit.contain)),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  product['name']!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
+              child: Consumer<FavoriteProvider>(
+                builder: (context, favoriteProvider, child) {
+                  return GridView.builder(
+                    itemCount: _filteredSpeakers.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      final speaker = _filteredSpeakers[index];
+                      final isFavorite = favoriteProvider.isFavorite(speaker);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SpeakerDetailsInside(
+                                productName: speaker['name']!,
+                                productPrice: speaker['price']!,
+                                productImage: speaker['image']!,
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  '${product['price']} USD',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                            ),
+                          );
+                        },
+                        child: Card(
+                          elevation: 2,
+                          color:
+                              _generateRandomColor(), // Assign a random color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Image.network(speaker['image']!,
+                                        fit: BoxFit.contain),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      speaker['name']!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Text(
+                                      '${speaker['price']} USD',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                bottom: 8,
+                                right: 2,
+                                child: IconButton(
+                                  icon: Icon(
+                                    isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    favoriteProvider.toggleFavorite(speaker);
+                                  },
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -239,9 +281,12 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
         showUnselectedLabels: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 67, 164, 243),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Color.fromARGB(255, 67, 164, 243)),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favorites'),
           BottomNavigationBarItem(

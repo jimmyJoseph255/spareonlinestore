@@ -1,114 +1,212 @@
 import 'package:flutter/material.dart';
-import 'SecondScreen.dart'; // Import the second screen
+import 'package:myproject/Screens/SecondScreen.dart';
+import 'package:confetti/confetti.dart';
 
-class Start extends StatelessWidget {
+class Start extends StatefulWidget {
   const Start({super.key});
+
+  @override
+  _StartState createState() => _StartState();
+}
+
+class _StartState extends State<Start> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late ConfettiController _confettiController;
+  late AnimationController _bubbleController;
+  late Animation<double> _bubbleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Floating car animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+      lowerBound: 0.0,
+      upperBound: 10.0,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0, end: 10).animate(_controller);
+
+    // Confetti animation
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
+
+    // Bubble button animation
+    _bubbleController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _bubbleAnimation =
+        Tween<double>(begin: 0, end: 10).animate(_bubbleController);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _confettiController.dispose();
+    _bubbleController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Top Section with text
-              const Column(
-                children: [
-                  SizedBox(height: 150),
-                  Text(
-                    'Welcome to',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Spare Parts Store',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Text(
-                      'Find quality spare parts for your vehicles and get them delivered directly to your doorstep. Explore our wide range of products designed to meet your needs.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-              // "Let's get started" button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the second screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SecondScreen(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text(
-                    "Let's get Started",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+        body: Stack(
+          children: [
+            // Background Gradient
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF0072FF), Color(0xFF16AFDA)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-
-              // Bottom Illustration
-              SizedBox(
-                width: double.infinity,
+              child: SafeArea(
                 child: Column(
                   children: [
-                    Image.asset(
-                      'lib/images/img.png', // Replace with your image asset
-                      width: 300,
-                      height: 180,
-                      fit: BoxFit.contain,
+                    // Confetti Celebration
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: ConfettiWidget(
+                        confettiController: _confettiController,
+                        blastDirectionality: BlastDirectionality.explosive,
+                        shouldLoop: false,
+                        colors: const [
+                          Colors.red,
+                          Colors.green,
+                          Colors.blue,
+                          Colors.orange
+                        ],
+                      ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 80,
-                      decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
+
+                    // Animated Car Image (near the top)
+                    AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _animation.value),
+                          child: Image.asset(
+                            'lib/images/car.png',
+                            width: 300,
+                            height: 250,
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Welcome Text with Fade-in Effect (below the car image)
+                    TweenAnimationBuilder(
+                      duration: const Duration(seconds: 2),
+                      tween: Tween<double>(begin: 0, end: 1),
+                      builder: (context, value, child) {
+                        return Opacity(
+                          opacity: value,
+                          child: const Text(
+                            "Spare Faster",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    // Description Text
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Text(
+                        "Get quality spare parts delivered to your doorstep with ease!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 255, 251, 0),
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
+
+                    const Spacer(),
+
+                    // "Let's Get Started" Bubble Button
+                    AnimatedBuilder(
+                      animation: _bubbleAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _bubbleAnimation.value),
+                          child: GestureDetector(
+                            onTap: () {
+                              _confettiController.play();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SecondScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              width: double.infinity,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 255, 255, 255),
+                                    Color.fromARGB(255, 255, 255, 255)
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blueAccent.withOpacity(0.5),
+                                    blurRadius: 10,
+                                    spreadRadius: 3,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Let's Get Started",
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 0, 0, 0),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 10,
+                                        color: Colors.black.withOpacity(0.3),
+                                        offset: const Offset(2, 2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
