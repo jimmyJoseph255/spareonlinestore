@@ -11,9 +11,13 @@ class EditPasswordScreen extends StatelessWidget {
         TextEditingController();
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        title: const Text('Change Password'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        title: const Text(
+          'Change Password',
+          style: TextStyle(color: Colors.white),
+        ),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -22,13 +26,6 @@ class EditPasswordScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Change Your Password',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 20),
             TextFormField(
               controller: oldPasswordController,
@@ -87,19 +84,19 @@ class EditPasswordScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromARGB(255, 243, 239, 2),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    side: const BorderSide(color: Colors.blue, width: 2),
+                    //side: const BorderSide(color: Colors.blue, width: 2),
                   ),
                 ),
                 child: const Text(
                   'Update Password',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -108,7 +105,6 @@ class EditPasswordScreen extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.white,
     );
   }
 }

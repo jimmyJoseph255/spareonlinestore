@@ -15,6 +15,7 @@ import 'package:myproject/Screens/SellerDeliveryAgentScreen.dart';
 import 'package:myproject/Screens/SellerFeedbackScreen.dart';
 import 'package:myproject/Screens/SellerReportScreen.dart';
 import 'package:myproject/Screens/SellerNotificationsScreen.dart';
+import 'package:myproject/Screens/selleraccountscreen.dart';
 
 class SellerDashboardScreen extends StatefulWidget {
   const SellerDashboardScreen({super.key});
@@ -85,10 +86,22 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                           );
                         },
                       ),
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 25,
                         backgroundImage: AssetImage('lib/images/profile.jpg'),
-                      ),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Navigate to the SellerAccountInformation screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const SellerAccountScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -192,6 +205,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
         onTap: _onItemTapped,
         backgroundColor: Color.fromARGB(255, 75, 167, 241),
         items: const [
@@ -254,7 +268,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AddProductScreen(),
+                        builder: (context) => AddProductScreen(),
                       ),
                     );
                   },

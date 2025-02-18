@@ -1,218 +1,226 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/Screens/CarTyresScreen%20.dart';
 
-class AddProductScreen extends StatefulWidget {
+import 'package:myproject/Screens/ClutchScreen.dart'; // Import the ClutchScreen
+import 'package:myproject/Screens/BrakeSystemScreen.dart'; // Import the BrakeSystemScreen
+import 'package:myproject/Screens/EngineScreen.dart'; // Import the EngineScreen
+import 'package:myproject/Screens/SideMirrorScreen.dart'; // Import the SideMirrorScre
+
+class AddProductScreen extends StatelessWidget {
   const AddProductScreen({super.key});
-
-  @override
-  _AddProductScreenState createState() => _AddProductScreenState();
-}
-
-class _AddProductScreenState extends State<AddProductScreen> {
-  int _selectedIndex = 0; // Default selected tab index
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index; // Update the selected index
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Add/Edit Product"),
+        title: const Text("Choose category"),
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       ),
-      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20), // Add space below the app bar
-
-            // Product Name
-            const Text(
-              'Product Name',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFFEEF6FD),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFEEF6FD),
-                    width: 1.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFEEF6FD),
-                    width: 2.0,
-                  ),
-                ),
-                hintText: 'Add product name',
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Product Price
-            const Text(
-              'Product Price',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFFEEF6FD),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFEEF6FD),
-                    width: 1.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFEEF6FD),
-                    width: 2.0,
-                  ),
-                ),
-                hintText: 'Add product price',
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Product Description
-            const Text(
-              'Product Description',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              maxLines: 4,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFFEEF6FD),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFEEF6FD),
-                    width: 1.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(238, 246, 253, 1),
-                    width: 2.0,
-                  ),
-                ),
-                hintText: 'Add product description',
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Image Upload Section
-            const SizedBox(height: 20),
+            // First Row of Buttons
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.camera_alt,
-                  color: Colors.grey,
-                  size: 30,
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CarTyresScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red, // Car tyre button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30), // Rectangular with rounded corners
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 60, // Increased width
+                        height: 90, // Increased height
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Car tyre",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Please upload the image',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ClutchScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green, // Clutch button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // Implement image choosing functionality here
-                        },
-                        child: Text(
-                          'Choose Image',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      child: SizedBox(
+                        width: 60,
+                        height: 90,
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Clutch",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => BrakeSystemScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Colors.blue, // Brake system button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    ],
-                  ),
+                      child: SizedBox(
+                        width: 60,
+                        height: 90,
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Brake System",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 16), // Spacing between rows
 
-            // Centered Save Button
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Implement save functionality here
-                },
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+            // Second Row of Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EngineScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange, // Engine button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 60,
+                        height: 90,
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Engine",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SideMirrorScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Colors.purple, // Side Mirror button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 60,
+                        height: 90,
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Side Mirror",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-              ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SideMirrorScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow, // Battery button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 60,
+                        height: 90,
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Battery",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
             ),
+            const SizedBox(height: 16), // Spacing between rows
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
       ),
     );
   }

@@ -7,10 +7,10 @@ class AcceptedOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         title: const Text('Accepted Orders'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -20,7 +20,7 @@ class AcceptedOrdersScreen extends StatelessWidget {
           itemCount: 10, // Example number of accepted orders
           itemBuilder: (context, index) {
             return Card(
-              color: Colors.white,
+              color: const Color.fromARGB(255, 255, 238, 0),
               elevation: 4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),

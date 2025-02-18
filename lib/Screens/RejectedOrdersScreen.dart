@@ -6,10 +6,11 @@ class RejectedOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: const Color.fromARGB(
+          255, 67, 164, 243), // Set the background color to white
       appBar: AppBar(
         title: const Text('Rejected Orders'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -19,7 +20,7 @@ class RejectedOrdersScreen extends StatelessWidget {
           itemCount: 10, // Example number of rejected orders
           itemBuilder: (context, index) {
             return Card(
-              color: Colors.white,
+              color: const Color.fromARGB(255, 250, 233, 0),
               elevation: 4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),

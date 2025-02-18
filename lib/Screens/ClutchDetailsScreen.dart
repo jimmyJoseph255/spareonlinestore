@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
 import 'package:myproject/Screens/FavoritesScreen.dart';
@@ -22,38 +21,41 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
       'name': 'Clutch Plate A',
       'price': '40 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
     },
     {
       'name': 'Clutch Kit B',
       'price': '90 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0',
     },
     {
       'name': 'Clutch Master Cylinder C',
       'price': '120 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
     },
     {
       'name': 'Clutch Master Cylinder D',
       'price': '80 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
     },
     {
       'name': 'Clutch Kit E',
       'price': '100 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
     },
-    {
-      'name': 'Clutch Kit E',
-      'price': '100 USD',
-      'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
-    },
+  ];
+
+  final List<Color> _cardColors = [
+    Colors.yellow,
+    Colors.pink,
+    Colors.purple,
+    Colors.green,
+    Colors.orange,
+    Colors.cyan,
   ];
 
   List<Map<String, String>> _filteredclutch = [];
@@ -65,7 +67,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     _filteredclutch = List.from(clutch);
   }
 
-  // Sorting functionality
   void _sortclutch(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
@@ -78,7 +79,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     });
   }
 
-  // Search functionality
   void _searchclutch(String query) {
     setState(() {
       _searchQuery = query;
@@ -89,7 +89,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     });
   }
 
-  // Navigation for Bottom Navigation Bar
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
@@ -109,17 +108,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
             MaterialPageRoute(builder: (context) => const AccountScreen()));
         break;
     }
-  }
-
-  // Method to generate a random color
-  Color _generateRandomColor() {
-    final Random random = Random();
-    return Color.fromRGBO(
-      random.nextInt(256), // Red
-      random.nextInt(256), // Green
-      random.nextInt(256), // Blue
-      1.0, // Opacity
-    );
   }
 
   @override
@@ -149,7 +137,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     );
   }
 
-  // Search and Sort bar widget
   Widget _buildSearchSortBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
@@ -186,7 +173,6 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     );
   }
 
-  // Clutch grid view widget
   Widget _buildClutchGrid() {
     return Expanded(
       child: Padding(
@@ -217,7 +203,8 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
                       ),
                     );
                   },
-                  child: _buildClutchCard(clutch, isFavorite, favoriteProvider),
+                  child: _buildClutchCard(
+                      clutch, isFavorite, favoriteProvider, index),
                 );
               },
             );
@@ -227,12 +214,11 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
     );
   }
 
-  // Build clutch card widget
   Widget _buildClutchCard(Map<String, String> clutch, bool isFavorite,
-      FavoriteProvider favoriteProvider) {
+      FavoriteProvider favoriteProvider, int index) {
     return Card(
       elevation: 2,
-      color: _generateRandomColor(),
+      color: _cardColors[index % _cardColors.length],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -255,46 +241,17 @@ class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  '${clutch['price']} USD',
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
             ],
-          ),
-          Positioned(
-            bottom: 8,
-            right: 2,
-            child: IconButton(
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.red,
-              ),
-              onPressed: () {
-                favoriteProvider.toggleFavorite(clutch);
-              },
-            ),
           ),
         ],
       ),
     );
   }
 
-  // Bottom navigation bar widget
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: 0,
       onTap: _onItemTapped,
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.black,
-      showUnselectedLabels: true,
-      backgroundColor: Colors.white,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),

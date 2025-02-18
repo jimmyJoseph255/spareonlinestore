@@ -7,8 +7,9 @@ class AccountSecurityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
@@ -20,7 +21,6 @@ class AccountSecurityScreen extends StatelessWidget {
           ),
         ),
       ),
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,7 +58,7 @@ class AccountSecurityScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Card(
-      color: Colors.white,
+      color: const Color.fromARGB(255, 255, 251, 0),
       child: ListTile(
         leading: Icon(icon, color: Colors.black),
         title: Text(

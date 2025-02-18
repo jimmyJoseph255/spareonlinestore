@@ -8,10 +8,10 @@ class OrderDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         title: const Text('Order Details'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -44,7 +44,9 @@ class OrderDetailsScreen extends StatelessWidget {
                   const TextSpan(text: 'Payment Status: '),
                   TextSpan(
                     text: 'Paid',
-                    style: const TextStyle(color: Colors.green),
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 0, 255, 8),
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -58,7 +60,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 print('Upload Receipt tapped!');
               },
               child: Card(
-                color: Colors.white,
+                color: const Color.fromARGB(255, 243, 239, 0),
                 elevation: 10,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

@@ -68,6 +68,17 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
     },
   ];
 
+  final List<Color> _cardColors = [
+    Colors.yellow,
+    const Color.fromARGB(255, 255, 0, 212),
+    const Color.fromARGB(255, 161, 154, 167),
+    const Color.fromARGB(255, 72, 255, 0),
+    const Color.fromARGB(255, 255, 153, 0),
+    const Color.fromARGB(255, 217, 0, 255),
+    const Color.fromARGB(255, 0, 236, 217),
+    const Color.fromARGB(255, 182, 40, 90),
+  ];
+
   List<Map<String, String>> _filteredbrakes = [];
   String _searchQuery = '';
 
@@ -96,17 +107,6 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
               brakes['name']!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
-  }
-
-  // Method to generate a random color
-  Color _generateRandomColor() {
-    final Random random = Random();
-    return Color.fromRGBO(
-      random.nextInt(256), // Red
-      random.nextInt(256), // Green
-      random.nextInt(256), // Blue
-      1.0, // Opacity
-    );
   }
 
   void _onItemTapped(int index) {
@@ -213,8 +213,8 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
                         },
                         child: Card(
                           elevation: 2,
-                          color:
-                              _generateRandomColor(), // Assign a random color
+                          color: _cardColors[index %
+                              _cardColors.length], // Assign a random color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -244,7 +244,7 @@ class _BrakeDetailsScreenState extends State<BrakeDetailsScreen> {
                                     child: Text(
                                       '${brakes['price']} USD',
                                       style: const TextStyle(
-                                        color: Colors.blue,
+                                        color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                       ),

@@ -26,10 +26,10 @@ class SellerNotificationsScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         title: const Text('Notifications'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -51,7 +51,7 @@ class SellerNotificationsScreen extends StatelessWidget {
                 );
               },
               child: Card(
-                color: Colors.white,
+                color: const Color.fromARGB(255, 255, 217, 0),
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

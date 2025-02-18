@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class SellerReportScreen extends StatefulWidget {
   @override
@@ -10,7 +12,6 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
   DateTime? _fromDate;
   DateTime? _toDate;
 
-  // Expanded sample data for a variety of products
   List<Map<String, dynamic>> _reportData = [];
 
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
@@ -35,7 +36,6 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
           _toDate = pickedDate;
         }
 
-        // Automatically generate the table when both dates are selected
         if (_fromDate != null && _toDate != null) {
           _generateTableData();
         }
@@ -43,7 +43,6 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
     }
   }
 
-  // Sample method to generate data for the table (expanded with more products)
   void _generateTableData() {
     setState(() {
       _reportData = [
@@ -54,7 +53,7 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
           "Car Type": "Sedan",
           "No of customers": 25,
           "Price": "\$50",
-          "Total Price": 25 * 50, // Total price for Tyre
+          "Total Price": 25 * 50,
         },
         {
           "Product": "Tyre",
@@ -63,7 +62,7 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
           "Car Type": "SUV",
           "No of customers": 20,
           "Price": "\$70",
-          "Total Price": 20 * 70, // Total price for Tyre
+          "Total Price": 20 * 70,
         },
         {
           "Product": "Side Mirror",
@@ -71,7 +70,7 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
           "Brand": "AutoZone",
           "No of customers": 30,
           "Price": "\$60",
-          "Total Price": 30 * 60, // Total price for Side Mirror
+          "Total Price": 30 * 60,
         },
         {
           "Product": "Side Mirror",
@@ -79,37 +78,85 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
           "Brand": "OEM",
           "No of customers": 15,
           "Price": "\$75",
-          "Total Price": 15 * 75, // Total price for Side Mirror
+          "Total Price": 15 * 75,
         },
         {
           "Product": "Speaker",
           "Details": "Brand: JBL, Size: 6.5 inch, 2-way",
           "No of customers": 15,
           "Price": "\$40",
-          "Total Price": 15 * 40, // Total price for Speaker
+          "Total Price": 15 * 40,
         },
         {
           "Product": "Speaker",
           "Details": "Brand: Bose, Size: 8 inch, 3-way",
           "No of customers": 10,
           "Price": "\$80",
-          "Total Price": 10 * 80, // Total price for Speaker
+          "Total Price": 10 * 80,
         },
         {
           "Product": "Air Filter",
           "Details": "Brand: Fram, Compatible with: Honda Civic",
           "No of customers": 12,
           "Price": "\$25",
-          "Total Price": 12 * 25, // Total price for Air Filter
+          "Total Price": 12 * 25,
         },
       ];
     });
   }
 
+  Future<void> _generatePDF() async {
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Sales Report',
+                  style: pw.TextStyle(
+                      fontSize: 24, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 10),
+              pw.Table.fromTextArray(
+                headers: [
+                  'Product',
+                  'Details',
+                  'Brand',
+                  'Car Type',
+                  'Customers',
+                  'Price',
+                  'Total Price'
+                ],
+                data: _reportData.map((data) {
+                  return [
+                    data['Product'] ?? 'N/A',
+                    data['Details'] ?? 'N/A',
+                    data['Brand'] ?? 'N/A',
+                    data['Car Type'] ?? 'N/A',
+                    data['No of customers'].toString() ?? '0',
+                    data['Price'] ?? 'N/A',
+                    "\$${data['Total Price'] ?? 0}",
+                  ];
+                }).toList(),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    Printing.layoutPdf(onLayout: (format) => pdf.save());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sales Report")),
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+      appBar: AppBar(
+        title: const Text('Accepted Orders'),
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
@@ -125,9 +172,9 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
                         Text(
                           "From Date",
                           style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
                         ),
                         SizedBox(height: 8),
                         GestureDetector(
@@ -138,7 +185,8 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 16),
                                 filled: true,
-                                fillColor: Colors.blueAccent.withOpacity(0.1),
+                                fillColor:
+                                    const Color.fromARGB(255, 30, 255, 0),
                                 hintText: _fromDate == null
                                     ? "Select From Date"
                                     : DateFormat('yyyy-MM-dd')
@@ -166,9 +214,9 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
                         Text(
                           "Up to Date",
                           style: TextStyle(
-                            color: Colors.redAccent,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
                         ),
                         SizedBox(height: 8),
                         GestureDetector(
@@ -179,11 +227,13 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 16),
                                 filled: true,
-                                fillColor: Colors.redAccent.withOpacity(0.1),
+                                fillColor: Colors.redAccent,
                                 hintText: _toDate == null
                                     ? "Select To Date"
                                     : DateFormat('yyyy-MM-dd').format(_toDate!),
-                                hintStyle: TextStyle(color: Colors.redAccent),
+                                hintStyle: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255)),
                                 prefixIcon: Icon(
                                   Icons.calendar_today,
                                   color: Colors.redAccent,
@@ -215,31 +265,59 @@ class _SellerReportScreenState extends State<SellerReportScreen> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    // Table
-                    DataTable(
-                      columns: [
-                        DataColumn(label: Text("Product")),
-                        DataColumn(label: Text("Details")),
-                        DataColumn(label: Text("Brand")),
-                        DataColumn(label: Text("Car Type")),
-                        DataColumn(label: Text("Customers")),
-                        DataColumn(label: Text("Price")),
-                        DataColumn(label: Text("Total Price")),
-                      ],
-                      rows: _reportData
-                          .map(
-                            (data) => DataRow(cells: [
-                              DataCell(Text(data['Product'] ?? 'N/A')),
-                              DataCell(Text(data['Details'] ?? 'N/A')),
-                              DataCell(Text(data['Brand'] ?? 'N/A')),
-                              DataCell(Text(data['Car Type'] ?? 'N/A')),
-                              DataCell(Text(
-                                  data['No of customers'].toString() ?? '0')),
-                              DataCell(Text(data['Price'] ?? 'N/A')),
-                              DataCell(Text("\$${data['Total Price'] ?? 0}")),
-                            ]),
-                          )
-                          .toList(),
+                    // Scrollable Table for large data
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: [
+                          DataColumn(label: Text("Product")),
+                          DataColumn(label: Text("Details")),
+                          DataColumn(label: Text("Brand")),
+                          DataColumn(label: Text("Car Type")),
+                          DataColumn(label: Text("Customers")),
+                          DataColumn(label: Text("Price")),
+                          DataColumn(label: Text("Total Price")),
+                        ],
+                        rows: _reportData
+                            .map(
+                              (data) => DataRow(cells: [
+                                DataCell(Text(data['Product'] ?? 'N/A')),
+                                DataCell(Text(data['Details'] ?? 'N/A')),
+                                DataCell(Text(data['Brand'] ?? 'N/A')),
+                                DataCell(Text(data['Car Type'] ?? 'N/A')),
+                                DataCell(Text(
+                                    data['No of customers'].toString() ?? '0')),
+                                DataCell(Text(data['Price'] ?? 'N/A')),
+                                DataCell(Text("\$${data['Total Price'] ?? 0}")),
+                              ]),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _generatePDF,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                            255, 255, 251, 0), // Button background color
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(30), // Rounded corners
+                        ),
+                        elevation: 10, // Shadow effect
+                        shadowColor:
+                            Colors.black.withOpacity(0.3), // Shadow color
+                      ),
+                      child: Text(
+                        'Download Report',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),

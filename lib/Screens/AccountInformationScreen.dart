@@ -12,15 +12,18 @@ class AccountInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         title: const Text(
           "Account Information",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Color.fromARGB(255, 255, 255, 255)),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -99,20 +102,23 @@ class AccountInformationScreen extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            backgroundColor: Colors.white,
             label: 'Home',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Add to Cart',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Account',
+            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
         ],
       ),
@@ -145,7 +151,7 @@ class AccountInformationScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.normal,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'cart_screen.dart';
 import 'shared_data.dart';
 
-class BrakeSystemDetailsInside extends StatefulWidget {
+class CarBatteryDetailsInside extends StatefulWidget {
   final String productName;
   final String productPrice;
   final String productImage;
 
-  const BrakeSystemDetailsInside({
+  const CarBatteryDetailsInside({
     super.key,
     required this.productName,
     required this.productPrice,
@@ -15,11 +15,11 @@ class BrakeSystemDetailsInside extends StatefulWidget {
   });
 
   @override
-  State<BrakeSystemDetailsInside> createState() =>
-      _BrakeSystemDetailsInsideState();
+  State<CarBatteryDetailsInside> createState() =>
+      _CarBatteryDetailsInsideState();
 }
 
-class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
+class _CarBatteryDetailsInsideState extends State<CarBatteryDetailsInside> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -38,13 +38,13 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          'Brake system Details',
+          'Car Battery Details',
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
@@ -68,7 +68,7 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 251, 0),
+                  backgroundColor: Colors.purple,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -96,41 +96,11 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
                   'Add to Cart',
                   style: TextStyle(
                       fontSize: 18,
-                      color: Color.fromARGB(255, 0, 0, 0),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-        unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-        showUnselectedLabels: true,
-        //backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Account',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
           ),
         ],
       ),

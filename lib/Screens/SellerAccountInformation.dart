@@ -8,7 +8,7 @@ class SellerAccountInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
@@ -22,20 +22,17 @@ class SellerAccountInformation extends StatelessWidget {
             );
           },
         ),
+        title: Text(
+          'Account Information',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       body: const Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Account Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30,
-            ),
             // Username Section
             Text(
               'Username',
@@ -54,7 +51,7 @@ class SellerAccountInformation extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ],
@@ -79,7 +76,7 @@ class SellerAccountInformation extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ],
@@ -104,7 +101,7 @@ class SellerAccountInformation extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ],
@@ -130,7 +127,7 @@ class SellerAccountInformation extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ],

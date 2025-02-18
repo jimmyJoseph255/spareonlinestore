@@ -57,6 +57,17 @@ class _SideMirrorDetailsScreenState extends State<SideMirrorDetailsScreen> {
     },
   ];
 
+  final List<Color> _cardColors = [
+    Colors.yellow,
+    const Color.fromARGB(255, 255, 0, 212),
+    const Color.fromARGB(255, 161, 154, 167),
+    const Color.fromARGB(255, 72, 255, 0),
+    const Color.fromARGB(255, 255, 153, 0),
+    const Color.fromARGB(255, 217, 0, 255),
+    const Color.fromARGB(255, 0, 236, 217),
+    const Color.fromARGB(255, 182, 40, 90),
+  ];
+
   List<Map<String, String>> _filteredsidemirror = [];
   String _searchQuery = '';
 
@@ -204,7 +215,7 @@ class _SideMirrorDetailsScreenState extends State<SideMirrorDetailsScreen> {
                         },
                         child: Card(
                           elevation: 2,
-                          color: _generateRandomColor(),
+                          color: _cardColors[index % _cardColors.length],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

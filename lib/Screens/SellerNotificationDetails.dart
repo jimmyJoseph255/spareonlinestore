@@ -7,10 +7,11 @@ class SellerNotificationDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: const Color.fromARGB(
+          255, 67, 164, 243), // Set the background color to white
       appBar: AppBar(
         title: const Text('Notification Details'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),

@@ -7,14 +7,14 @@ import 'AccountSecurityScreen.dart';
 import 'AccountInformationScreen.dart';
 import 'cart_screen.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+class SellerAccountScreen extends StatefulWidget {
+  const SellerAccountScreen({super.key});
 
   @override
-  _AccountScreenState createState() => _AccountScreenState();
+  _SellerAccountScreenState createState() => _SellerAccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _SellerAccountScreenState extends State<SellerAccountScreen> {
   int _currentIndex = 3; // Set the initial index to the 'Account' section
 
   // Handle navigation based on bottom navigation selection
@@ -45,7 +45,7 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 0, 0)),
         title: Text("Account",
             style: TextStyle(
               color: Colors.white, // Change to white

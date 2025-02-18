@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
 import 'package:myproject/Screens/FavoritesScreen.dart';
 import 'package:myproject/Screens/accountscreen.dart';
+import 'package:myproject/Screens/carbatterydetailsinside.dart';
 import 'package:myproject/provider/favorite_provider.dart';
 import 'package:provider/provider.dart';
 import 'cart_screen.dart';
-import 'clutchdetailsinside.dart';
 
 class CarBatteryDetailsScreen extends StatefulWidget {
   const CarBatteryDetailsScreen({super.key});
@@ -18,61 +18,61 @@ class CarBatteryDetailsScreen extends StatefulWidget {
 }
 
 class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
-  final List<Map<String, String>> clutch = const [
+  final List<Map<String, String>> carBatteries = const [
     {
-      'name': 'Clutch Plate A',
-      'price': '40 USD',
-      'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
-    },
-    {
-      'name': 'Clutch Kit B',
-      'price': '90 USD',
-      'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
-    },
-    {
-      'name': 'Clutch Master Cylinder C',
+      'name': 'Exide Car Battery 12V',
       'price': '120 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.45dbca628c0bc12387db677581a5b838?rik=v8IkvMtaeudZMQ&riu=http%3a%2f%2fpngimg.com%2fuploads%2fautomotive_battery%2fautomotive_battery_PNG12111.png&ehk=A5rRbFyhrgQaSXiclx4wk9MViEQ%2fd9jsipsE%2fPDpOXo%3d&risl=&pid=ImgRaw&r=0'
     },
     {
-      'name': 'Clutch Master Cylinder D',
-      'price': '80 USD',
+      'name': 'Bosch S5 Car Battery 12V',
+      'price': '150 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.bbb14c3bea97aef6849b4300ba3086b2?rik=YQzEv7NkwOGDVA&riu=http%3a%2f%2fwww.pngmart.com%2ffiles%2f5%2fCar-Battery-PNG-Transparent-Image.png&ehk=ypDxZyiMundt2%2f9HKUzf585sGA6lKiOVPJXmuxXxdAg%3d&risl=&pid=ImgRaw&r=0'
     },
     {
-      'name': 'Clutch Kit E',
+      'name': 'Varta Silver Car Battery',
+      'price': '135 USD',
+      'image':
+          'https://th.bing.com/th/id/R.45dbca628c0bc12387db677581a5b838?rik=v8IkvMtaeudZMQ&riu=http%3a%2f%2fpngimg.com%2fuploads%2fautomotive_battery%2fautomotive_battery_PNG12111.png&ehk=A5rRbFyhrgQaSXiclx4wk9MViEQ%2fd9jsipsE%2fPDpOXo%3d&risl=&pid=ImgRaw&r=0'
+    },
+    {
+      'name': 'ACDelco Car Battery',
       'price': '100 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.45dbca628c0bc12387db677581a5b838?rik=v8IkvMtaeudZMQ&riu=http%3a%2f%2fpngimg.com%2fuploads%2fautomotive_battery%2fautomotive_battery_PNG12111.png&ehk=A5rRbFyhrgQaSXiclx4wk9MViEQ%2fd9jsipsE%2fPDpOXo%3d&risl=&pid=ImgRaw&r=0'
     },
     {
-      'name': 'Clutch Kit E',
-      'price': '100 USD',
+      'name': 'Yuasa Car Battery',
+      'price': '130 USD',
       'image':
-          'https://th.bing.com/th/id/R.ef3a57e08b3d780fe397ecc75fbb66fe?rik=e1vsHo3JiNaeIw&pid=ImgRaw&r=0'
+          'https://th.bing.com/th/id/R.bbb14c3bea97aef6849b4300ba3086b2?rik=YQzEv7NkwOGDVA&riu=http%3a%2f%2fwww.pngmart.com%2ffiles%2f5%2fCar-Battery-PNG-Transparent-Image.png&ehk=ypDxZyiMundt2%2f9HKUzf585sGA6lKiOVPJXmuxXxdAg%3d&risl=&pid=ImgRaw&r=0'
+    },
+    {
+      'name': 'Optima RedTop Car Battery',
+      'price': '160 USD',
+      'image':
+          'https://th.bing.com/th/id/R.bbb14c3bea97aef6849b4300ba3086b2?rik=YQzEv7NkwOGDVA&riu=http%3a%2f%2fwww.pngmart.com%2ffiles%2f5%2fCar-Battery-PNG-Transparent-Image.png&ehk=ypDxZyiMundt2%2f9HKUzf585sGA6lKiOVPJXmuxXxdAg%3d&risl=&pid=ImgRaw&r=0'
     },
   ];
 
-  List<Map<String, String>> _filteredclutch = [];
+  List<Map<String, String>> _filteredCarBatteries = [];
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _filteredclutch = List.from(clutch);
+    _filteredCarBatteries = List.from(carBatteries);
   }
 
   // Sorting functionality
-  void _sortclutch(String criteria) {
+  void _sortCarBatteries(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
-        _filteredclutch.sort((a, b) => a['name']!.compareTo(b['name']!));
+        _filteredCarBatteries.sort((a, b) => a['name']!.compareTo(b['name']!));
       } else if (criteria == 'Price') {
-        _filteredclutch.sort((a, b) =>
+        _filteredCarBatteries.sort((a, b) =>
             int.parse(a['price']!.replaceAll(' USD', ''))
                 .compareTo(int.parse(b['price']!.replaceAll(' USD', ''))));
       }
@@ -80,12 +80,12 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
   }
 
   // Search functionality
-  void _searchclutch(String query) {
+  void _searchCarBatteries(String query) {
     setState(() {
       _searchQuery = query;
-      _filteredclutch = clutch
-          .where((clutch) =>
-              clutch['name']!.toLowerCase().contains(query.toLowerCase()))
+      _filteredCarBatteries = carBatteries
+          .where((battery) =>
+              battery['name']!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -135,7 +135,7 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Clutch System Details',
+          'Car Battery Details',
           style: TextStyle(color: Colors.black, fontSize: 22),
         ),
         centerTitle: true,
@@ -143,7 +143,7 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
       body: Column(
         children: [
           _buildSearchSortBar(),
-          _buildClutchGrid(),
+          _buildCarBatteryGrid(),
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -158,10 +158,10 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
         children: [
           Expanded(
             child: TextField(
-              onChanged: _searchclutch,
+              onChanged: _searchCarBatteries,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Search Clutch Systems',
+                hintText: 'Search Car Batteries',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -174,7 +174,7 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
           const SizedBox(width: 10),
           PopupMenuButton<String>(
             icon: const Icon(Icons.sort),
-            onSelected: _sortclutch,
+            onSelected: _sortCarBatteries,
             color: Colors.white,
             itemBuilder: (context) => [
               const PopupMenuItem(
@@ -187,15 +187,15 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
     );
   }
 
-  // Clutch grid view widget
-  Widget _buildClutchGrid() {
+  // Car battery grid view widget
+  Widget _buildCarBatteryGrid() {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Consumer<FavoriteProvider>(
           builder: (context, favoriteProvider, child) {
             return GridView.builder(
-              itemCount: _filteredclutch.length,
+              itemCount: _filteredCarBatteries.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.8,
@@ -203,22 +203,23 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) {
-                final clutch = _filteredclutch[index];
-                final isFavorite = favoriteProvider.isFavorite(clutch);
+                final battery = _filteredCarBatteries[index];
+                final isFavorite = favoriteProvider.isFavorite(battery);
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ClutchDetailsInside(
-                          productName: clutch['name']!,
-                          productPrice: clutch['price']!,
-                          productImage: clutch['image']!,
+                        builder: (context) => CarBatteryDetailsInside(
+                          productName: battery['name']!,
+                          productPrice: battery['price']!,
+                          productImage: battery['image']!,
                         ),
                       ),
                     );
                   },
-                  child: _buildClutchCard(clutch, isFavorite, favoriteProvider),
+                  child: _buildCarBatteryCard(
+                      battery, isFavorite, favoriteProvider),
                 );
               },
             );
@@ -228,8 +229,8 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
     );
   }
 
-  // Build clutch card widget
-  Widget _buildClutchCard(Map<String, String> clutch, bool isFavorite,
+  // Build car battery card widget
+  Widget _buildCarBatteryCard(Map<String, String> battery, bool isFavorite,
       FavoriteProvider favoriteProvider) {
     return Card(
       elevation: 2,
@@ -243,12 +244,12 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Image.network(clutch['image']!, fit: BoxFit.contain),
+                child: Image.network(battery['image']!, fit: BoxFit.contain),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  clutch['name']!,
+                  battery['name']!,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -259,7 +260,7 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Text(
-                  '${clutch['price']} USD',
+                  '${battery['price']} USD',
                   style: const TextStyle(
                     color: Colors.blue,
                     fontSize: 14,
@@ -278,7 +279,7 @@ class _CarBatteryDetailsScreenState extends State<CarBatteryDetailsScreen> {
                 color: Colors.red,
               ),
               onPressed: () {
-                favoriteProvider.toggleFavorite(clutch);
+                favoriteProvider.toggleFavorite(battery);
               },
             ),
           ),

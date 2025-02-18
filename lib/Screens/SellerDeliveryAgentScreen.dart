@@ -6,10 +6,11 @@ class SellerDeliveryAgentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: const Color.fromARGB(
+          255, 67, 164, 243), // Set background color to white
       appBar: AppBar(
         title: const Text('Delivery Agent'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -19,7 +20,7 @@ class SellerDeliveryAgentScreen extends StatelessWidget {
           itemCount: 10, // Set to null or a large number for infinite scrolling
           itemBuilder: (context, index) {
             return Card(
-              color: Colors.white,
+              color: const Color.fromARGB(255, 255, 251, 0),
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),

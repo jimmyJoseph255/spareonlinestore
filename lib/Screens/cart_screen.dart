@@ -49,13 +49,15 @@ class _CartScreenState extends State<CartScreen> {
     double totalCost = getTotalCost(subtotal, taxes, deliveryFee);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         title: const Text(
           'Cart',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              //backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+              fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: cartItems.isEmpty
@@ -98,7 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                               Text(
                                 item['price']!,
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.blue),
+                                    fontSize: 14, color: Colors.black),
                               ),
                               Row(
                                 children: [
@@ -123,7 +125,7 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.add,
-                                        color: Colors.green),
+                                        color: Color.fromARGB(255, 0, 255, 8)),
                                     onPressed: () {
                                       setState(() {
                                         quantity++;

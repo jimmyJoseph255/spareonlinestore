@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/Screens/CarBatteryDetailsScree.dart';
+import 'package:myproject/Screens/CarBatteryDetailsScreen.dart';
 
 class ChooseCarBatteryDetails extends StatefulWidget {
   const ChooseCarBatteryDetails({super.key});

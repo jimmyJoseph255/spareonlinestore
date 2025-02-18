@@ -68,6 +68,18 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
     },
   ];
 
+  // List of predefined colors for each card
+  final List<Color> _cardColors = [
+    Colors.yellow,
+    const Color.fromARGB(255, 255, 0, 212),
+    const Color.fromARGB(255, 161, 154, 167),
+    const Color.fromARGB(255, 72, 255, 0),
+    const Color.fromARGB(255, 255, 153, 0),
+    const Color.fromARGB(255, 217, 0, 255),
+    const Color.fromARGB(255, 0, 236, 217),
+    const Color.fromARGB(255, 182, 40, 90),
+  ];
+
   List<Map<String, String>> _filteredSpeakers = [];
   String _searchQuery = '';
 
@@ -112,17 +124,6 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const FavoritesScreen()));
     }
-  }
-
-  // Method to generate a random color
-  Color _generateRandomColor() {
-    final Random random = Random();
-    return Color.fromRGBO(
-      random.nextInt(256), // Red
-      random.nextInt(256), // Green
-      random.nextInt(256), // Blue
-      1.0, // Opacity
-    );
   }
 
   @override
@@ -210,8 +211,8 @@ class _SpeakerDetailsScreenState extends State<SpeakerDetailsScreen> {
                         },
                         child: Card(
                           elevation: 2,
-                          color:
-                              _generateRandomColor(), // Assign a random color
+                          color: _cardColors[index %
+                              _cardColors.length], // Assign a random color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
