@@ -5,15 +5,41 @@ class EditPhoneNumberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController oldPasswordController = TextEditingController();
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
+    final TextEditingController oldPhoneNumberController =
+        TextEditingController();
+    final TextEditingController newPhoneNumberController =
+        TextEditingController();
+    final TextEditingController confirmPhoneNumberController =
         TextEditingController();
 
+    InputDecoration customInputDecoration(String label, IconData icon) {
+      return InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black87, fontSize: 16),
+        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        filled: true,
+        fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.grey, width: 1),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      );
+    }
+
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        title: const Text('Change PhoneNumber'),
-        backgroundColor: Colors.white,
+        title: const Text('Change Phone Number'),
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -22,84 +48,65 @@ class EditPhoneNumberScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Change Your PhoneNumber',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: oldPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Old PhoneNumber',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: oldPhoneNumberController,
+              decoration:
+                  customInputDecoration('Old Phone Number', Icons.phone),
+              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: newPasswordController,
-              decoration: InputDecoration(
-                labelText: 'New PhoneNumber',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: newPhoneNumberController,
+              decoration: customInputDecoration(
+                  'New Phone Number', Icons.phone_android),
+              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm New PhoneNumber',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: confirmPhoneNumberController,
+              decoration: customInputDecoration(
+                  'Confirm New Phone Number', Icons.check),
+              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  if (newPasswordController.text !=
-                      confirmPasswordController.text) {
+                  if (newPhoneNumberController.text !=
+                      confirmPhoneNumberController.text) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
-                            'New PhoneNumber and confirmation do not match'),
+                            'New Phone Number and confirmation do not match'),
                         backgroundColor: Colors.red,
                       ),
                     );
                     return;
                   }
 
-                  // Add logic to update the password here
+                  // Add logic to update the phone number here
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('PhoneNumber updated successfully!'),
+                      content: Text('Phone Number updated successfully!'),
                       backgroundColor: Colors.green,
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromARGB(255, 252, 247, 0),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.blue, width: 2),
                   ),
                 ),
                 child: const Text(
-                  'Update PhoneNumber',
+                  'Update Phone Number',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -108,7 +115,6 @@ class EditPhoneNumberScreen extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.white,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/provider/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +22,24 @@ class FavoritesScreen extends StatelessWidget {
             children: [
               AppBar(
                 elevation: 3,
-                title: const Text("Favorites Screen",
-                    style: TextStyle(color: Colors.white)),
+                title: Text(
+                  "Favorites Screen",
+                  style: GoogleFonts.lato(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
                 backgroundColor: Colors.transparent,
+                leading: GestureDetector(
+                  onTap: () {
+                    // Silent back navigation when the back button is tapped
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(Icons.arrow_back,
+                      color: Color.fromARGB(255, 0, 0, 0)),
+                ),
+                centerTitle: true,
               ),
               Expanded(
                 child: Consumer<FavoriteProvider>(
@@ -31,9 +47,15 @@ class FavoritesScreen extends StatelessWidget {
                     final favorites = favoriteProvider.favoriteItems;
 
                     return favorites.isEmpty
-                        ? const Center(
-                            child: Text("No favorites yet!",
-                                style: TextStyle(color: Colors.white)))
+                        ? Center(
+                            child: Text(
+                            "No favorites yet!",
+                            style: GoogleFonts.lato(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ))
                         : ListView.builder(
                             itemCount: favorites.length,
                             itemBuilder: (context, index) {
@@ -44,8 +66,21 @@ class FavoritesScreen extends StatelessWidget {
                                 margin: const EdgeInsets.all(8.0),
                                 child: ListTile(
                                   leading: Image.network(tyre['image']!),
-                                  title: Text(tyre['name']!),
-                                  subtitle: Text('${tyre['price']} USD'),
+                                  title: Text(
+                                    tyre['name']!,
+                                    style: GoogleFonts.lato(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    '${tyre['price']} USD',
+                                    style: GoogleFonts.lato(
+                                      fontSize: 13,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.delete,
                                         color: Colors.red),

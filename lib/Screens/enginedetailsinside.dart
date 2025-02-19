@@ -37,15 +37,23 @@ class _EngineDetailsInsideState extends State<EngineDetailsInside> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           'Engine Details',
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
         ),
       ),
       body: Column(
@@ -59,7 +67,10 @@ class _EngineDetailsInsideState extends State<EngineDetailsInside> {
           Image.network(widget.productImage, height: 200, width: 200),
           const SizedBox(height: 20),
           Text(widget.productPrice,
-              style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontWeight: FontWeight.bold)),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
@@ -67,7 +78,7 @@ class _EngineDetailsInsideState extends State<EngineDetailsInside> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: const Color.fromARGB(255, 249, 253, 0),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -95,7 +106,7 @@ class _EngineDetailsInsideState extends State<EngineDetailsInside> {
                   'Add to Cart',
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 0, 0, 0),
                       fontWeight: FontWeight.bold),
                 ),
               ),

@@ -10,6 +10,29 @@ class EditPasswordScreen extends StatelessWidget {
     final TextEditingController confirmPasswordController =
         TextEditingController();
 
+    InputDecoration customInputDecoration(String label, IconData icon) {
+      return InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black87, fontSize: 16),
+        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        filled: true,
+        fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.grey, width: 1),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
@@ -29,34 +52,21 @@ class EditPasswordScreen extends StatelessWidget {
             const SizedBox(height: 20),
             TextFormField(
               controller: oldPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Old Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
+              decoration: customInputDecoration('Old Password', Icons.lock),
               obscureText: true,
             ),
             const SizedBox(height: 15),
             TextFormField(
               controller: newPasswordController,
-              decoration: InputDecoration(
-                labelText: 'New Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
+              decoration:
+                  customInputDecoration('New Password', Icons.lock_outline),
               obscureText: true,
             ),
             const SizedBox(height: 15),
             TextFormField(
               controller: confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm New Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
+              decoration:
+                  customInputDecoration('Confirm New Password', Icons.check),
               obscureText: true,
             ),
             const SizedBox(height: 30),
@@ -84,12 +94,12 @@ class EditPasswordScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 243, 239, 2),
+                  backgroundColor: const Color.fromARGB(255, 252, 247, 0),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    //side: const BorderSide(color: Colors.blue, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: const BorderSide(color: Colors.blue, width: 2),
                   ),
                 ),
                 child: const Text(

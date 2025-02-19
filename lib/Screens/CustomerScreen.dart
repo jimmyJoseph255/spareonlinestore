@@ -286,6 +286,23 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                   const DashboardScreen(),
                                             ),
                                           );
+                                        } else if (isRegisterSelected) {
+                                          // Show the success message when register is selected
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  "You have successfully registered"),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                          // After showing the message, you can navigate if needed
+                                          // Navigator.push(
+                                          //   context,
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) => const DashboardScreen(),
+                                          //   ),
+                                          // );
                                         }
                                       }
                                     },

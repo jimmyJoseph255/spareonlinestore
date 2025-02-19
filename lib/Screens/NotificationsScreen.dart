@@ -1,53 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math';
+
+import 'package:myproject/Screens/NotificationDetailScreen.dart';
+import 'package:myproject/Screens/PaymentDetailsScreen.dart'; // For random number generation
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Sample list of customer notifications
-    final List<Map<String, String>> notifications = [
-      {
-        'title': 'Order Confirmed',
-        'message': 'Your order #12345 has been confirmed. Get ready!',
-        'timeAgo': '5 minutes ago',
-      },
-      {
-        'title': 'Order Shipped',
-        'message': 'Your order #12345 is on the way!',
-        'timeAgo': '30 minutes ago',
-      },
-      {
-        'title': 'Payment Successful',
-        'message': 'Your payment for order #12346 was successful. Enjoy!',
-        'timeAgo': '1 hour ago',
-      },
-      {
-        'title': 'Delivery Update',
-        'message': 'Your order #12347 will arrive tomorrow!',
-        'timeAgo': '3 hours ago',
-      },
-      {
-        'title': 'Exclusive Offer',
-        'message': 'Get 20% off on your next purchase! Limited time only.',
-        'timeAgo': '1 day ago',
-      },
-      {
-        'title': 'Security Alert',
-        'message': 'Your account was accessed from a new device. Verify now!',
-        'timeAgo': '1 day ago',
-      },
-      {
-        'title': 'New Product Alert',
-        'message': 'Check out our latest arrivals! Special discounts inside.',
-        'timeAgo': '2 days ago',
-      },
-      {
-        'title': 'Payment Successful',
-        'message': 'Your payment for order #12346 was successful. Thank you!',
-        'timeAgo': '1 hour ago',
-      },
+    final List<Map<String, String>> notifications =
+        _generateRandomNotifications(200);
+
+    final List<Color> avatarColors = [
+      Colors.blueAccent,
+      Colors.green,
+      Colors.redAccent,
+      Colors.orange,
+      Colors.purple,
+      Colors.teal,
+      Colors.pink,
+      Colors.deepOrange,
     ];
 
     return Scaffold(
@@ -61,20 +35,20 @@ class NotificationsScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const SizedBox(height: 50), // Space for status bar
+            const SizedBox(height: 40), // Space for status bar
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(width: 30),
-                Text("Your Notifications",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                      //fontWeight: FontWeight.bold,
-                    )),
+                Text(
+                  "Notifications",
+                  style: GoogleFonts.lato(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
-
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -82,8 +56,9 @@ class NotificationsScreen extends StatelessWidget {
                   itemCount: notifications.length,
                   itemBuilder: (context, index) {
                     final notification = notifications[index];
+
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Card(
                         color: const Color.fromARGB(255, 253, 249, 0)
                             .withOpacity(0.9),
@@ -92,29 +67,94 @@ class NotificationsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          leading: const Icon(Icons.notifications_active,
-                              color: Color.fromARGB(255, 30, 61, 233)),
+                          leading: CircleAvatar(
+                            backgroundColor:
+                                avatarColors[index % avatarColors.length],
+                            child: Text(
+                              notification['title']![
+                                  0], // First letter of the title
+                              style: GoogleFonts.lato(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                           title: Text(
                             notification['title']!,
                             style: GoogleFonts.lato(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 13,
                             ),
                           ),
                           subtitle: Text(
                             notification['message']!,
-                            style: GoogleFonts.lato(fontSize: 14),
+                            style: GoogleFonts.lato(fontSize: 13),
                           ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                notification['timeAgo']!,
-                                style: GoogleFonts.lato(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
+                          trailing: Text(
+                            notification['timeAgo']!,
+                            style: GoogleFonts.lato(
+                                fontSize: 12, color: Colors.grey),
                           ),
+                          onTap: () {
+                            // Navigation logic remains unchanged
+                            switch (notification['type']) {
+                              case 'order':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderDetailsScreen(
+                                      orderId: notification['orderId']!,
+                                    ),
+                                  ),
+                                );
+                                break;
+                              case 'payment':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PaymentDetailsScreen(
+                                      amount: notification['amount']!,
+                                    ),
+                                  ),
+                                );
+                                break;
+                              case 'security':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SecurityAlertScreen(
+                                      device: notification['device']!,
+                                    ),
+                                  ),
+                                );
+                                break;
+                              case 'offer':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OfferDetailsScreen(
+                                      discountCode:
+                                          notification['discountCode']!,
+                                    ),
+                                  ),
+                                );
+                                break;
+                              default:
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NotificationDetailScreen(
+                                      title: notification['title']!,
+                                      message: notification['message']!,
+                                      timeAgo: notification['timeAgo']!,
+                                    ),
+                                  ),
+                                );
+                                break;
+                            }
+                          },
                         ),
                       ),
                     );
@@ -125,6 +165,97 @@ class NotificationsScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  // Function to generate random notifications
+  List<Map<String, String>> _generateRandomNotifications(int count) {
+    final List<String> types = [
+      'order',
+      'payment',
+      'security',
+      'offer',
+      'general'
+    ];
+    final Random random = Random();
+    final List<Map<String, String>> notifications = [];
+
+    for (int i = 0; i < count; i++) {
+      final type = types[random.nextInt(types.length)];
+      final title = _generateRandomTitle(type);
+      final message = _generateRandomMessage(type);
+      final timeAgo = _generateRandomTimeAgo();
+
+      notifications.add({
+        'title': title,
+        'message': message,
+        'timeAgo': timeAgo,
+        'type': type,
+        if (type == 'order') 'orderId': (i + 10000).toString(),
+        if (type == 'payment')
+          'amount': '\$${(random.nextInt(100) + 50).toString()}.00',
+        if (type == 'security') 'device': 'Device ${random.nextInt(100)}',
+        if (type == 'offer') 'discountCode': 'SAVE${random.nextInt(100)}',
+      });
+    }
+
+    return notifications;
+  }
+
+  String _generateRandomTitle(String type) {
+    switch (type) {
+      case 'order':
+        return 'Order Confirmed';
+      case 'payment':
+        return 'Payment Successful';
+      case 'security':
+        return 'Security Alert';
+      case 'offer':
+        return 'Exclusive Offer';
+      default:
+        return 'New Product Alert';
+    }
+  }
+
+  String _generateRandomMessage(String type) {
+    switch (type) {
+      case 'order':
+        return 'Your order has been confirmed. Get ready!';
+      case 'payment':
+        return 'Your payment was successful.';
+      case 'security':
+        return 'Your account was accessed from a new device.';
+      case 'offer':
+        return 'Get 20% off on your next purchase! Limited time only.';
+      default:
+        return 'Check out our latest arrivals! Special discounts inside.';
+    }
+  }
+
+  String _generateRandomTimeAgo() {
+    final random = Random();
+    final timeAgoOptions = [
+      '5 minutes ago',
+      '1 hour ago',
+      '1 day ago',
+      '2 days ago',
+      '3 days ago'
+    ];
+    return timeAgoOptions[random.nextInt(timeAgoOptions.length)];
+  }
+}
+
+// Different Screens Based on Notification Type
+
+class OrderDetailsScreen extends StatelessWidget {
+  final String orderId;
+  const OrderDetailsScreen({super.key, required this.orderId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Order Details")),
+      body: Center(child: Text("Details for Order ID: $orderId")),
     );
   }
 }

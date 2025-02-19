@@ -135,9 +135,13 @@ class _TyreDetailsScreenState extends State<TyreDetailsScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
         ),
         title: const Text(
           'Tyre Details',

@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/Screens/refundcreen.dart';
 import 'package:myproject/provider/favorite_provider.dart';
 import 'CategoryScreen.dart';
@@ -22,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
   List<Map<String, String>> _favorites = [];
+  int notificationCount = 5;
 
   final List<String> _carouselImages = [
     'lib/images/Engine.png', // Engine Product
@@ -121,31 +123,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildAppBar() {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Welcome\nJimmy',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              'Hello\nJimmy',
+              style:
+                  GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Row(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_active_outlined,
-                      color: Colors.black, size: 28),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationsScreen(),
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.black,
+                        size: 30,
                       ),
-                    );
-                  },
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    // Badge for the number
+                    if (notificationCount >
+                        0) // Only show badge if count is greater than 0
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 20,
+                            minHeight: 20,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$notificationCount',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
@@ -153,7 +191,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AccountScreen()),
+                        builder: (context) => const AccountScreen(),
+                      ),
                     );
                   },
                   child: const CircleAvatar(

@@ -5,15 +5,39 @@ class EditUsernameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController oldPasswordController = TextEditingController();
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
+    final TextEditingController oldUsernameController = TextEditingController();
+    final TextEditingController newUsernameController = TextEditingController();
+    final TextEditingController confirmUsernameController =
         TextEditingController();
 
+    InputDecoration customInputDecoration(String label, IconData icon) {
+      return InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black87, fontSize: 16),
+        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        filled: true,
+        fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.grey, width: 1),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      );
+    }
+
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
         title: const Text('Change Username'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
@@ -22,52 +46,28 @@ class EditUsernameScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Change Your Username',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: oldPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Old Username',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: oldUsernameController,
+              decoration: customInputDecoration('Old Username', Icons.person),
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: newPasswordController,
-              decoration: InputDecoration(
-                labelText: 'New Username',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: newUsernameController,
+              decoration: customInputDecoration('New Username', Icons.edit),
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm New Username',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
+              controller: confirmUsernameController,
+              decoration:
+                  customInputDecoration('Confirm New Username', Icons.check),
             ),
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  if (newPasswordController.text !=
-                      confirmPasswordController.text) {
+                  if (newUsernameController.text !=
+                      confirmUsernameController.text) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content:
@@ -78,7 +78,7 @@ class EditUsernameScreen extends StatelessWidget {
                     return;
                   }
 
-                  // Add logic to update the password here
+                  // Add logic to update the username here
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Username updated successfully!'),
@@ -87,11 +87,11 @@ class EditUsernameScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromARGB(255, 252, 247, 0),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.blue, width: 2),
                   ),
                 ),
@@ -99,7 +99,7 @@ class EditUsernameScreen extends StatelessWidget {
                   'Update Username',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -108,7 +108,6 @@ class EditUsernameScreen extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.white,
     );
   }
 }

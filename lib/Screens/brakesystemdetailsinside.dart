@@ -48,6 +48,14 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +68,10 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
           Image.network(widget.productImage, height: 200, width: 200),
           const SizedBox(height: 20),
           Text(widget.productPrice,
-              style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontWeight: FontWeight.bold)),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),

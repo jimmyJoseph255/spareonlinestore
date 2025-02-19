@@ -47,6 +47,14 @@ class _TyreDetailsInsideState extends State<TyreDetailsInside> {
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

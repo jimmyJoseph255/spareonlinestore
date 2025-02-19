@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/Screens/DashboardScreen.dart';
 import 'package:myproject/Screens/OrderScreen.dart';
 import 'customerscreen.dart';
@@ -28,7 +29,7 @@ class _AccountScreenState extends State<AccountScreen> {
         MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     } else if (index == 1) {
-      // Handle Search navigation
+      // Handle Search navigation silently
     } else if (index == 2) {
       Navigator.push(
         context,
@@ -43,15 +44,26 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Text("Account",
-            style: TextStyle(
-              color: Colors.white, // Change to white
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            )),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
+        ),
+        title: Text(
+          "Account",
+          style: GoogleFonts.lato(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
       ),
       backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       body: Padding(
@@ -63,6 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.shopping_bag,
               title: 'Orders',
               onTap: () {
+                // Silent navigation to Orders screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const OrdersScreen()),
@@ -74,6 +87,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.account_circle,
               title: 'Account Information',
               onTap: () {
+                // Silent navigation to Account Information screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -86,6 +100,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.security,
               title: 'Security and Settings',
               onTap: () {
+                // Silent navigation to Security and Settings screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -98,6 +113,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.help,
               title: 'Help',
               onTap: () {
+                // Silent navigation to Help screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const HelpScreen()),
@@ -109,6 +125,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.logout,
               title: 'Log Out',
               onTap: () {
+                // Silent navigation to Customer screen on Log Out
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -157,19 +174,22 @@ class _AccountScreenState extends State<AccountScreen> {
     required String title,
     required VoidCallback onTap,
   }) {
-    return Card(
-      color: const Color.fromARGB(255, 58, 58, 58), // Set card color to yellow
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white, // Change to white
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: onTap, // Silent onTap event
+      child: Card(
+        color:
+            const Color.fromARGB(255, 58, 58, 58), // Set card color to yellow
+        child: ListTile(
+          leading: Icon(icon, color: Colors.white),
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white, // Change to white
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        onTap: onTap,
       ),
     );
   }

@@ -56,6 +56,14 @@ class _ChooseTyreDetailsState extends State<ChooseTyreDetails> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        leading: GestureDetector(
+          onTap: () {
+            // Silent back navigation when the back button is tapped
+            Navigator.pop(context);
+          },
+          child:
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
+        ),
       ),
       body: Container(
         color: const Color.fromARGB(255, 67, 164,

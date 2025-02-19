@@ -27,6 +27,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
       appBar: AppBar(
         title: const Text("My Orders"),
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context); // Silent back navigation
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -59,52 +65,66 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _buildOngoingOrder() {
-    return Card(
-      color: const Color.fromARGB(255, 255, 251, 0),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Order #12345",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 5),
-            const Text("Status: On The Way",
-                style: TextStyle(
-                    color: Colors.green, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 5),
-            const Text("Estimated Delivery: 15 mins"),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {}, // Implement tracking logic
-                  icon: const Icon(Icons.location_on, color: Colors.white),
-                  label: const Text(
-                    "Track Order",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () {
+        // Optional: Add navigation or additional functionality if desired
+      },
+      child: Card(
+        color: const Color.fromARGB(255, 255, 251, 0),
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Order #12345",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 5),
+              const Text("Status: On The Way",
+                  style: TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              const Text("Estimated Delivery: 15 mins"),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Implement tracking logic
+                    },
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.location_on, color: Colors.white),
+                      label: const Text(
+                        "Track Order",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 182, 27, 27)),
+                    ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 182, 27, 27)),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton.icon(
-                  onPressed: _callRider, // Call function to dial the number
-                  icon: const Icon(Icons.phone, color: Colors.white),
-                  label: const Text(
-                    "Call Rider",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: _callRider, // Call function to dial the number
+                    child: ElevatedButton.icon(
+                      onPressed: _callRider,
+                      icon: const Icon(Icons.phone, color: Colors.white),
+                      label: const Text(
+                        "Call Rider",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green),
+                    ),
                   ),
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -130,31 +150,33 @@ class _OrdersScreenState extends State<OrdersScreen> {
       itemCount: pastOrders.length,
       itemBuilder: (context, index) {
         var order = pastOrders[index];
-        return Card(
-          color: const Color.fromARGB(255, 255, 251, 0),
-          elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: ListTile(
-            title: Text("Order #${order['id']}",
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text("${order['items']} - ${order['date']}"),
-            trailing: Text(order['total']!,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.black)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderDetailScreen(
-                    orderId: order['id']!,
-                    date: order['date']!,
-                    items: order['items']!,
-                    total: order['total']!,
-                  ),
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderDetailScreen(
+                  orderId: order['id']!,
+                  date: order['date']!,
+                  items: order['items']!,
+                  total: order['total']!,
                 ),
-              );
-            },
+              ),
+            );
+          },
+          child: Card(
+            color: const Color.fromARGB(255, 255, 251, 0),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: ListTile(
+              title: Text("Order #${order['id']}",
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text("${order['items']} - ${order['date']}"),
+              trailing: Text(order['total']!,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black)),
+            ),
           ),
         );
       },
