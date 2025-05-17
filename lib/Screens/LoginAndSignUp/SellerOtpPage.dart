@@ -25,7 +25,7 @@ class SellerOtpPage extends StatelessWidget {
             const Spacer(flex: 2),
             Image.asset('lib/images/car.png', width: 200, height: 100),
             const SizedBox(height: 20),
-            Text('OTP Verification',
+            Text('Seller OTP Verification',
                 style: GoogleFonts.roboto(
                     fontSize: 24,
                     color: Colors.white,
@@ -100,7 +100,7 @@ Widget _buildOtpForm(OTPController controller) {
       bool isVerified = await controller.verifyOTP();
 
       if (isVerified) {
-        Get.offAll(() => const DashboardScreen());
+        Get.offAll(() => const SellerDashboardScreen());
       }
     },
   );

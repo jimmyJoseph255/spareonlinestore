@@ -14,6 +14,7 @@ class SpeakerDetailsInside extends StatefulWidget {
     required this.productName,
     required this.productPrice,
     required this.productImage,
+    required productPower,
   });
 
   @override

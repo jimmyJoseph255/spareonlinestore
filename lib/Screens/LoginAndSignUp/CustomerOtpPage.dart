@@ -24,7 +24,7 @@ class CustomerOtpPage extends StatelessWidget {
             const Spacer(flex: 2),
             Image.asset('lib/images/car.png', width: 200, height: 100),
             const SizedBox(height: 20),
-            Text('OTP Verification',
+            Text('Customer OTP Verification',
                 style: GoogleFonts.roboto(
                     fontSize: 24,
                     color: Colors.white,

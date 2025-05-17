@@ -231,15 +231,14 @@ class _SideMirrorScreenState extends State<SideMirrorScreen> {
                       TextFormField(
                         controller: _categoryNameController,
                         style: const TextStyle(color: Colors.black),
+                        readOnly: true,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: 'Enter Category Name',
+                          hintText: 'Side Mirror',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
-                        validator: (value) =>
-                            value!.isEmpty ? 'Category name required' : null,
                       ),
                       const SizedBox(height: 16),
                       _buildDropdown(

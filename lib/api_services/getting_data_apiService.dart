@@ -60,4 +60,24 @@ class ApiService {
     return fetchProductsByCategory(
         categoryId: 8, token: token); // Car batteries — assuming category_id 7
   }
+
+  static Future<List<dynamic>> fetchSpeakersProducts({String? token}) async {
+    return fetchProductsByCategory(
+        categoryId: 2, token: token); // Car batteries — assuming category_id 7
+  }
+
+  static Future<List<dynamic>> fetchClutchesProducts({String? token}) async {
+    return fetchProductsByCategory(
+        categoryId: 6, token: token); // Car batteries — assuming category_id 7
+  }
+
+  static Future<List<dynamic>> fetchExhaustProducts({String? token}) async {
+    return fetchProductsByCategory(
+        categoryId: 9, token: token); // Car batteries — assuming category_id 7
+  }
+
+  static Future<List<dynamic>> fetchBrakeSystemProducts({String? token}) async {
+    return fetchProductsByCategory(
+        categoryId: 3, token: token); // Car batteries — assuming category_id 7
+  }
 }

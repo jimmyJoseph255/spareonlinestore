@@ -1,14 +1,15 @@
-import 'dart:math';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/Screens/Dashboard/DashboardScreen.dart';
-
 import 'package:myproject/Screens/account/accountscreen.dart';
 import 'package:myproject/Screens/cart/cart_screen.dart';
 import 'package:myproject/Screens/widgets/FavoritesScreen.dart';
-
+import 'package:myproject/api_services/getting_data_apiService.dart';
 import 'package:myproject/provider/favorite_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'clutchdetailsinside.dart';
 
 class ClutchDetailsScreen extends StatefulWidget {
@@ -19,253 +20,414 @@ class ClutchDetailsScreen extends StatefulWidget {
 }
 
 class _ClutchDetailsScreenState extends State<ClutchDetailsScreen> {
-  final List<Map<String, String>> clutch = const [
-    {
-      'name': 'Clutch Plate A',
-      'price': '40 USD',
-      'image':
-          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
-    },
-    {
-      'name': 'Clutch Kit B',
-      'price': '90 USD',
-      'image':
-          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0',
-    },
-    {
-      'name': 'Clutch Master Cylinder C',
-      'price': '120 USD',
-      'image':
-          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
-    },
-    {
-      'name': 'Clutch Master Cylinder D',
-      'price': '80 USD',
-      'image':
-          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
-    },
-    {
-      'name': 'Clutch Kit E',
-      'price': '100 USD',
-      'image':
-          'https://th.bing.com/th/id/R.f92af3994d54687d79c33d6e1f4ecdf7?rik=01aAoLDO%2biizdQ&riu=http%3a%2f%2fcenterlinealfa.com%2fsites%2fcenterlinealfa.com%2fassets%2fimages%2fCategory_Images%2fclutch.png&ehk=3VQTK90QkHeP%2bpUFe5OHErDnybLIL%2fz9FnjzAvPDHD4%3d&risl=&pid=ImgRaw&r=0'
-    },
-  ];
+  List<Map<String, dynamic>> _products = [];
+  List<Map<String, dynamic>> _filteredProducts = [];
+  bool _isLoading = true;
+  String? _token;
 
   final List<Color> _cardColors = [
     Colors.yellow,
-    Colors.pink,
-    Colors.purple,
-    Colors.green,
-    Colors.orange,
-    Colors.cyan,
+    Color(0xFFFF00D4),
+    Color(0xFFA19AA7),
+    Color(0xFF48FF00),
+    Color(0xFFFF9900),
+    Color(0xFFD900FF),
+    Color(0xFF00ECD9),
+    Color(0xFFB6285A),
   ];
-
-  List<Map<String, String>> _filteredclutch = [];
-  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _filteredclutch = List.from(clutch);
+    _loadToken();
   }
 
-  void _sortclutch(String criteria) {
+  Future<void> _loadToken() async {
+    final box = GetStorage();
+    _token = box.read('token');
+
+    if (_token == null) {
+      final prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString('auth_token');
+    }
+
+    if (_token != null) {
+      print('Token loaded in ClutchDetailsScreen: $_token');
+      _fetchProducts();
+    } else {
+      print('No token found in ClutchDetailsScreen');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _fetchProducts() async {
+    try {
+      final products = await ApiService.fetchClutchesProducts(token: _token);
+      print('Fetched clutch products: $products');
+
+      setState(() {
+        _products = products.map<Map<String, dynamic>>((product) {
+          String imageUrl = '';
+
+          final imageData = product['image'];
+          if (imageData is String) {
+            if (imageData.trim().startsWith('{')) {
+              try {
+                final decoded = jsonDecode(imageData);
+                if (decoded is Map && decoded.containsKey('path')) {
+                  imageUrl = decoded['path'] ?? '';
+                }
+              } catch (e) {
+                print('Failed to decode image JSON: $e');
+                imageUrl = imageData;
+              }
+            } else {
+              imageUrl = imageData;
+            }
+          } else if (imageData is Map) {
+            imageUrl = imageData['path']?.toString() ??
+                imageData['url']?.toString() ??
+                '';
+          }
+
+          // Replace backslashes
+          imageUrl = imageUrl.replaceAll('\\', '/');
+
+          print('Processed image URL: $imageUrl');
+
+          return {
+            'name': product['product_name']?.toString() ?? 'No Name',
+            'price': product['price']?.toString() ?? '0',
+            'image': imageUrl,
+            'id': product['id']?.toString() ?? '',
+            'car_make': product['car_make']?.toString() ?? 'N/A',
+            'car_model': product['car_model']?.toString() ?? 'N/A',
+            'car_year': product['car_year']?.toString() ?? 'N/A',
+            'part_type': product['part_type']?.toString() ?? 'N/A',
+          };
+        }).toList();
+
+        _filteredProducts = List.from(_products);
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching clutch products: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  String _constructImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+
+    final cleanPath =
+        imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+
+    return 'https://sparefasta.co.tz/storage/$cleanPath';
+  }
+
+  void _sortProducts(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
-        _filteredclutch.sort((a, b) => a['name']!.compareTo(b['name']!));
+        _filteredProducts.sort((a, b) =>
+            (a['name'] ?? 'No Name').compareTo(b['name'] ?? 'No Name'));
       } else if (criteria == 'Price') {
-        _filteredclutch.sort((a, b) =>
-            int.parse(a['price']!.replaceAll(' USD', ''))
-                .compareTo(int.parse(b['price']!.replaceAll(' USD', ''))));
+        _filteredProducts.sort((a, b) {
+          final priceA = double.tryParse(a['price'] ?? '0') ?? 0;
+          final priceB = double.tryParse(b['price'] ?? '0') ?? 0;
+          return priceA.compareTo(priceB);
+        });
+      } else if (criteria == 'Year') {
+        _filteredProducts.sort((a, b) {
+          final yearA = int.tryParse(a['car_year'] ?? '0') ?? 0;
+          final yearB = int.tryParse(b['car_year'] ?? '0') ?? 0;
+          return yearA.compareTo(yearB);
+        });
       }
     });
   }
 
-  void _searchclutch(String query) {
+  void _searchProduct(String query) {
     setState(() {
-      _searchQuery = query;
-      _filteredclutch = clutch
-          .where((clutch) =>
-              clutch['name']!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      _filteredProducts = _products.where((product) {
+        final name = (product['name'] ?? '').toLowerCase();
+        final price = product['price'] ?? '';
+        final make = product['car_make'] ?? '';
+        final model = product['car_model'] ?? '';
+        final year = product['car_year'] ?? '';
+        final partType = product['part_type'] ?? '';
+
+        return name.contains(query.toLowerCase()) ||
+            price.contains(query) ||
+            make.toLowerCase().contains(query.toLowerCase()) ||
+            model.toLowerCase().contains(query.toLowerCase()) ||
+            year.contains(query) ||
+            partType.toLowerCase().contains(query.toLowerCase());
+      }).toList();
     });
   }
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()));
-        break;
-      case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => FavoritesScreen()));
-        break;
-      case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CartScreen()));
-        break;
-      case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AccountScreen()));
-        break;
+    if (index == 2) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => CartScreen()));
+    } else if (index == 0) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+    } else if (index == 3) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AccountScreen()));
+    } else if (index == 1) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+      backgroundColor: Color(0xFF43A4F3),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+        backgroundColor: Color(0xFF43A4F3),
         elevation: 0,
         leading: GestureDetector(
-          onTap: () {
-            // Silent back navigation when the back button is tapped
-            Navigator.pop(context);
-          },
-          child:
-              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: const Text(
+        title: Text(
           'Clutch System Details',
-          style: TextStyle(color: Colors.black, fontSize: 22),
+          style: GoogleFonts.lato(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          _buildSearchSortBar(),
-          _buildClutchGrid(),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
-    );
-  }
-
-  Widget _buildSearchSortBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              onChanged: _searchclutch,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: 'Search Clutch Systems',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.sort),
-            onSelected: _sortclutch,
-            color: Colors.white,
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                  value: 'Alphabetical', child: Text('Sort A-Z')),
-              const PopupMenuItem(value: 'Price', child: Text('Sort by Price')),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildClutchGrid() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<FavoriteProvider>(
-          builder: (context, favoriteProvider, child) {
-            return GridView.builder(
-              itemCount: _filteredclutch.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.8,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                final clutch = _filteredclutch[index];
-                final isFavorite = favoriteProvider.isFavorite(clutch);
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ClutchDetailsInside(
-                          productName: clutch['name']!,
-                          productPrice: clutch['price']!,
-                          productImage: clutch['image']!,
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: 'Search Clutch Systems',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          onChanged: _searchProduct,
                         ),
                       ),
-                    );
-                  },
-                  child: _buildClutchCard(
-                      clutch, isFavorite, favoriteProvider, index),
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildClutchCard(Map<String, String> clutch, bool isFavorite,
-      FavoriteProvider favoriteProvider, int index) {
-    return Card(
-      elevation: 2,
-      color: _cardColors[index % _cardColors.length],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Image.network(clutch['image']!, fit: BoxFit.contain),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  clutch['name']!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                      SizedBox(width: 10),
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.sort),
+                        onSelected: _sortProducts,
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                              value: 'Alphabetical', child: Text('Sort A-Z')),
+                          PopupMenuItem(
+                              value: 'Price', child: Text('Sort by Price')),
+                          PopupMenuItem(
+                              value: 'Year', child: Text('Sort by Year')),
+                        ],
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Consumer<FavoriteProvider>(
+                      builder: (context, favoriteProvider, child) {
+                        return GridView.builder(
+                          itemCount: _filteredProducts.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.8,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = _filteredProducts[index];
+                            final imageUrl =
+                                _constructImageUrl(product['image'] ?? '');
+                            final favoriteProduct = {
+                              'name': (product['name'] ?? 'No Name').toString(),
+                              'price': (product['price'] ?? '0').toString(),
+                              'image': (product['image'] ?? '').toString(),
+                              'id': (product['id'] ?? '').toString(),
+                              'car_make':
+                                  (product['car_make'] ?? 'N/A').toString(),
+                              'car_model':
+                                  (product['car_model'] ?? 'N/A').toString(),
+                              'car_year':
+                                  (product['car_year'] ?? 'N/A').toString(),
+                              'part_type':
+                                  (product['part_type'] ?? 'N/A').toString(),
+                            };
+                            final isFavorite =
+                                favoriteProvider.isFavorite(favoriteProduct);
+
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ClutchDetailsInside(
+                                      productName: product['name'] ?? 'No Name',
+                                      productPrice: '${product['price']} Tsh',
+                                      productImage: product['image'] ?? '',
+                                      carMake: product['car_make'] ?? 'N/A',
+                                      carModel: product['car_model'] ?? 'N/A',
+                                      carYear: product['car_year'] ?? 'N/A',
+                                      partType: product['part_type'] ?? 'N/A',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 2,
+                                color: _cardColors[index % _cardColors.length],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.contain,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Container(
+                                                color: Colors.grey[200],
+                                                child: Center(
+                                                  child: Icon(
+                                                      Icons.broken_image,
+                                                      size: 10,
+                                                      color: Colors.grey),
+                                                ),
+                                              );
+                                            },
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            product['name'] ?? 'No Name',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Text(
+                                            '${product['price']} Tsh | ${product['car_make']}',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Positioned(
+                                      bottom: 8,
+                                      right: 2,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          isFavorite
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          favoriteProvider
+                                              .toggleFavorite(favoriteProduct);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        showUnselectedLabels: true,
+        backgroundColor: Color(0xFF43A4F3),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Color(0xFF43A4F3),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+            backgroundColor: Color(0xFF43A4F3),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+            backgroundColor: Color(0xFF43A4F3),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Account',
+            backgroundColor: Color(0xFF43A4F3),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      currentIndex: 0,
-      onTap: _onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle), label: 'Account'),
-      ],
     );
   }
 }

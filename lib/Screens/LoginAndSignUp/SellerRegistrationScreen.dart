@@ -34,7 +34,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
 
       try {
         final response = await apiService.post(
-          '/customer/signup',
+          '/seller/signup',
           {
             'name': _usernameController.text,
             'email': _emailController.text,

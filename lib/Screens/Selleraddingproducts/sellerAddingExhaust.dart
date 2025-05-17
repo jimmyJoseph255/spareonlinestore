@@ -7,68 +7,75 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' show MultipartRequest, MultipartFile;
 import 'package:myproject/Screens/widgets/SuccessScreen.dart';
 
-class ChooseBrakeSystemDetails extends StatefulWidget {
-  const ChooseBrakeSystemDetails({super.key});
+class AddExhaustScreen extends StatefulWidget {
+  const AddExhaustScreen({super.key});
 
   @override
-  _ChooseBrakeSystemDetailsState createState() =>
-      _ChooseBrakeSystemDetailsState();
+  _AddExhaustScreenState createState() => _AddExhaustScreenState();
 }
 
-class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
+class _AddExhaustScreenState extends State<AddExhaustScreen> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
-  // Brake system options
-  final List<String> _makeOptions = [
-    'Toyota',
-    'Honda',
-    'BMW',
-    'Ford',
-    'Nissan'
-  ];
-  final List<String> _modelOptions = [
-    'Corolla',
-    'Civic',
-    '320i',
-    'Focus',
-    'Altima'
-  ];
+  final List<String> _makeOptions = ['Toyota', 'Honda', 'BMW'];
+  final List<String> _modelOptions = ['Corolla', 'Civic', '320i'];
   final List<String> _yearOptions =
       List.generate(30, (index) => '${2025 - index}');
-  final List<String> _brakeTypeOptions = ['disc', 'drum'];
-  final List<String> _positionOptions = ['front', 'rear', 'universal'];
-  final List<String> _padMaterialOptions = [
-    'ceramic',
-    'organic',
-    'semi-metallic',
-    'low-metallic'
+  final List<String> _positionOptions = [
+    'front',
+    'rear',
+    'center',
+    'universal'
   ];
-  final List<String> _rotorDiameterOptions =
-      List.generate(20, (index) => '${200 + (index * 10)}');
-  final List<String> _rotorThicknessOptions =
-      List.generate(15, (index) => '${5 + index}');
-  final List<String> _pistonCountOptions = ['1', '2', '3', '4', '6', '8'];
-  final List<String> _brakeFluidOptions = ['DOT3', 'DOT4', 'DOT5', 'DOT5.1'];
+  final List<String> _partTypeOptions = [
+    'kit',
+    'muffler',
+    'pipe',
+    'sensor',
+    'flex_pipe',
+    'resonator',
+    'catalytic_convertor',
+    'manifold'
+  ];
+  final List<String> _materialOptions = ['stainless', 'aluminum', 'mild_steel'];
+  final List<String> _fitmentTypeOptions = ['direct_fit', 'universal_fit'];
   final List<String> _priceOptions =
-      List.generate(20, (index) => '${(index + 1) * 10000}');
+      List.generate(10, (index) => '${(index + 1) * 1000}');
   final List<String> _stockOptions =
       List.generate(20, (index) => '${index + 1}');
+  final List<String> _lengthOptions =
+      List.generate(20, (index) => '${10 + index}');
+
+  // New diameter options
+  final List<String> _diameterOptions = [
+    '50',
+    '60',
+    '70',
+    '80',
+    '90',
+    '100',
+    '110',
+    '120',
+    '130',
+    '140',
+    '150'
+  ];
 
   String? _selectedMake,
       _selectedModel,
       _selectedYear,
-      _selectedBrakeType,
       _selectedPosition,
-      _selectedPadMaterial,
-      _selectedRotorDiameter,
-      _selectedRotorThickness,
-      _selectedPistonCount,
-      _selectedBrakeFluid,
+      _selectedPartType,
+      _selectedMaterial,
+      _selectedFitmentType,
       _selectedPrice,
-      _selectedStock;
+      _selectedStock,
+      _selectedLength,
+      _selectedInletDiameter,
+      _selectedOutletDiameter;
 
-  bool _isAbsCompatible = false;
+  bool _isEmissionApproved = false;
   File? _image;
   String? _token;
 
@@ -113,21 +120,22 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
           'Content-Type': 'multipart/form-data',
         });
 
-        request.fields['product_name'] = 'brake system';
+        request.fields['product_name'] = 'exhaust';
         request.fields['car_make'] = _selectedMake!;
         request.fields['car_model'] = _selectedModel!;
         request.fields['car_year'] = _selectedYear!;
-        request.fields['brake_type'] = _selectedBrakeType!;
         request.fields['position'] = _selectedPosition!;
-        request.fields['pad_material'] = _selectedPadMaterial!;
-        request.fields['rotor_diameter_mm'] = _selectedRotorDiameter!;
-        request.fields['rotor_thickness_mm'] = _selectedRotorThickness!;
-        request.fields['piston_count'] = _selectedPistonCount!;
-        request.fields['is_abs_compatible'] = _isAbsCompatible ? '1' : '0';
-        request.fields['brake_fluid_type'] = _selectedBrakeFluid!;
+        request.fields['part_type'] = _selectedPartType!;
+        request.fields['material'] = _selectedMaterial!;
+        request.fields['is_emission_approved'] =
+            _isEmissionApproved ? '1' : '0';
+        request.fields['fitment_type'] = _selectedFitmentType!;
+        request.fields['inlet_diameter_mm'] = _selectedInletDiameter ?? '';
+        request.fields['outlet_diameter_mm'] = _selectedOutletDiameter ?? '';
+        request.fields['length_mm'] = _selectedLength!;
         request.fields['price'] = _selectedPrice!;
         request.fields['stock'] = _selectedStock!;
-        request.fields['category_id'] = '3'; // Brake system category_id
+        request.fields['category_id'] = '9'; // Exhaust category_id
 
         request.files.add(await MultipartFile.fromPath('image', _image!.path));
 
@@ -142,16 +150,16 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
             _selectedMake = null;
             _selectedModel = null;
             _selectedYear = null;
-            _selectedBrakeType = null;
             _selectedPosition = null;
-            _selectedPadMaterial = null;
-            _selectedRotorDiameter = null;
-            _selectedRotorThickness = null;
-            _selectedPistonCount = null;
-            _selectedBrakeFluid = null;
+            _selectedPartType = null;
+            _selectedMaterial = null;
+            _selectedFitmentType = null;
             _selectedPrice = null;
             _selectedStock = null;
-            _isAbsCompatible = false;
+            _selectedLength = null;
+            _selectedInletDiameter = null;
+            _selectedOutletDiameter = null;
+            _isEmissionApproved = false;
             _image = null;
           });
 
@@ -213,7 +221,6 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -242,7 +249,7 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
-        title: Text('Add Brake System',
+        title: Text('Add Exhaust',
             style: GoogleFonts.lato(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -268,55 +275,49 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
                 _buildDropdown('Year', _yearOptions, _selectedYear,
                     (v) => setState(() => _selectedYear = v),
                     validator: (v) => v == null ? 'Select year' : null),
-                _buildDropdown(
-                    'Brake Type',
-                    _brakeTypeOptions,
-                    _selectedBrakeType,
-                    (v) => setState(() => _selectedBrakeType = v),
-                    validator: (v) => v == null ? 'Select brake type' : null),
                 _buildDropdown('Position', _positionOptions, _selectedPosition,
                     (v) => setState(() => _selectedPosition = v),
                     validator: (v) => v == null ? 'Select position' : null),
+                _buildDropdown('Part Type', _partTypeOptions, _selectedPartType,
+                    (v) => setState(() => _selectedPartType = v),
+                    validator: (v) => v == null ? 'Select part type' : null),
+                _buildDropdown('Material', _materialOptions, _selectedMaterial,
+                    (v) => setState(() => _selectedMaterial = v),
+                    validator: (v) => v == null ? 'Select material' : null),
                 _buildDropdown(
-                    'Pad Material',
-                    _padMaterialOptions,
-                    _selectedPadMaterial,
-                    (v) => setState(() => _selectedPadMaterial = v),
-                    validator: (v) => v == null ? 'Select pad material' : null),
+                    'Fitment Type',
+                    _fitmentTypeOptions,
+                    _selectedFitmentType,
+                    (v) => setState(() => _selectedFitmentType = v),
+                    validator: (v) => v == null ? 'Select fitment type' : null),
+
+                // Inlet Diameter Dropdown
                 _buildDropdown(
-                    'Rotor Diameter (mm)',
-                    _rotorDiameterOptions,
-                    _selectedRotorDiameter,
-                    (v) => setState(() => _selectedRotorDiameter = v),
-                    validator: (v) =>
-                        v == null ? 'Select rotor diameter' : null),
+                    'Inlet Diameter',
+                    _diameterOptions,
+                    _selectedInletDiameter,
+                    (v) => setState(() => _selectedInletDiameter = v)),
+
+                // Outlet Diameter Dropdown
                 _buildDropdown(
-                    'Rotor Thickness (mm)',
-                    _rotorThicknessOptions,
-                    _selectedRotorThickness,
-                    (v) => setState(() => _selectedRotorThickness = v),
-                    validator: (v) =>
-                        v == null ? 'Select rotor thickness' : null),
-                _buildDropdown(
-                    'Piston Count',
-                    _pistonCountOptions,
-                    _selectedPistonCount,
-                    (v) => setState(() => _selectedPistonCount = v),
-                    validator: (v) => v == null ? 'Select piston count' : null),
-                _buildDropdown(
-                    'Brake Fluid Type',
-                    _brakeFluidOptions,
-                    _selectedBrakeFluid,
-                    (v) => setState(() => _selectedBrakeFluid = v),
-                    validator: (v) => v == null ? 'Select brake fluid' : null),
-                _buildSwitch('ABS Compatible', _isAbsCompatible,
-                    (v) => setState(() => _isAbsCompatible = v)),
+                    'Outlet Diameter',
+                    _diameterOptions,
+                    _selectedOutletDiameter,
+                    (v) => setState(() => _selectedOutletDiameter = v)),
+
+                _buildSwitch('Emission Approved', _isEmissionApproved,
+                    (v) => setState(() => _isEmissionApproved = v)),
+
+                _buildDropdown('Length (mm)', _lengthOptions, _selectedLength,
+                    (v) => setState(() => _selectedLength = v),
+                    validator: (v) => v == null ? 'Select length' : null),
                 _buildDropdown('Price (Tsh)', _priceOptions, _selectedPrice,
                     (v) => setState(() => _selectedPrice = v),
                     validator: (v) => v == null ? 'Select price' : null),
                 _buildDropdown('Stock', _stockOptions, _selectedStock,
                     (v) => setState(() => _selectedStock = v),
                     validator: (v) => v == null ? 'Select stock' : null),
+
                 const Text('Upload Image',
                     style: TextStyle(
                         fontSize: 18,

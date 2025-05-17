@@ -171,7 +171,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   borderSide: BorderSide(color: Colors.white, width: 2),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
             ),
             SizedBox(height: 15),
             TextField(
@@ -191,7 +190,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   borderSide: BorderSide(color: Colors.white, width: 2),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
             ),
             SizedBox(height: 15),
             TextField(
@@ -211,7 +209,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   borderSide: BorderSide(color: Colors.white, width: 2),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
             ),
             SizedBox(height: 15),
             TextField(
@@ -231,7 +228,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   borderSide: BorderSide(color: Colors.white, width: 2),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
             ),
             SizedBox(height: 90),
             ElevatedButton(

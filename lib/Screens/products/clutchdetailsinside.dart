@@ -12,6 +12,10 @@ class ClutchDetailsInside extends StatefulWidget {
     required this.productName,
     required this.productPrice,
     required this.productImage,
+    required carMake,
+    required carModel,
+    required carYear,
+    required partType,
   });
 
   @override

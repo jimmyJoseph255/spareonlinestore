@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/Screens/Dashboard/DashboardScreen.dart';
 import 'package:myproject/Screens/account/accountscreen.dart';
 import 'package:myproject/Screens/cart/cart_screen.dart';
-import 'package:myproject/Screens/products/SuspensionDetailsInside.dart';
 import 'package:myproject/Screens/widgets/FavoritesScreen.dart';
 import 'package:myproject/api_services/getting_data_apiService.dart';
 import 'package:myproject/provider/favorite_provider.dart';
@@ -12,15 +11,14 @@ import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SuspensionDetailsScreen extends StatefulWidget {
-  const SuspensionDetailsScreen({super.key});
+class ExhaustDetailsScreen extends StatefulWidget {
+  const ExhaustDetailsScreen({super.key});
 
   @override
-  State<SuspensionDetailsScreen> createState() =>
-      _SuspensionDetailsScreenState();
+  State<ExhaustDetailsScreen> createState() => _ExhaustDetailsScreenState();
 }
 
-class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
+class _ExhaustDetailsScreenState extends State<ExhaustDetailsScreen> {
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> _filteredProducts = [];
   bool _isLoading = true;
@@ -53,18 +51,18 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
     }
 
     if (_token != null) {
-      print('Token loaded in SuspensionDetailsScreen: $_token');
+      print('Token loaded in ExhaustDetailsScreen: $_token');
       _fetchProducts();
     } else {
-      print('No token found in SuspensionDetailsScreen');
+      print('No token found in ExhaustDetailsScreen');
       setState(() => _isLoading = false);
     }
   }
 
   Future<void> _fetchProducts() async {
     try {
-      final products = await ApiService.fetchSuspensionProducts(token: _token);
-      print('Fetched suspension products: $products');
+      final products = await ApiService.fetchExhaustProducts(token: _token);
+      print('Fetched products: $products');
 
       setState(() {
         _products = products.map<Map<String, dynamic>>((product) {
@@ -91,13 +89,10 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
                 '';
           }
 
-          // Replace backslashes
           imageUrl = imageUrl.replaceAll('\\', '/');
 
-          print('Processed image URL: $imageUrl');
-
           return {
-            'name': product['name']?.toString() ?? 'No Name',
+            'product_name': product['product_name']?.toString() ?? 'No Name',
             'price': product['price']?.toString() ?? '0',
             'image': imageUrl,
             'id': product['id']?.toString() ?? '',
@@ -108,7 +103,7 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching suspension products: $e');
+      print('Error fetching products: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -126,8 +121,8 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
   void _sortProducts(String criteria) {
     setState(() {
       if (criteria == 'Alphabetical') {
-        _filteredProducts.sort((a, b) =>
-            (a['name'] ?? 'No Name').compareTo(b['name'] ?? 'No Name'));
+        _filteredProducts.sort((a, b) => (a['product_name'] ?? 'No Name')
+            .compareTo(b['product_name'] ?? 'No Name'));
       } else if (criteria == 'Price') {
         _filteredProducts.sort((a, b) {
           final priceA = double.tryParse(a['price'] ?? '0') ?? 0;
@@ -141,7 +136,7 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
   void _searchProduct(String query) {
     setState(() {
       _filteredProducts = _products.where((product) {
-        final name = (product['name'] ?? '').toLowerCase();
+        final name = (product['product_name'] ?? '').toLowerCase();
         final price = product['price'] ?? '';
         return name.contains(query.toLowerCase()) || price.contains(query);
       }).toList();
@@ -171,20 +166,21 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
       appBar: AppBar(
         backgroundColor: Color(0xFF43A4F3),
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back,
-              color: const Color.fromARGB(255, 255, 255, 255)),
-        ),
         title: Text(
-          'Suspension Parts',
+          'Exhaust Details',
           style: GoogleFonts.lato(
             fontSize: 17,
             fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 255, 255, 255),
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -199,7 +195,7 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
                         child: TextField(
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.search),
-                            hintText: 'Search Suspension Parts',
+                            hintText: 'Search Exhausts',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,
@@ -244,7 +240,8 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
                             final imageUrl =
                                 _constructImageUrl(product['image'] ?? '');
                             final favoriteProduct = {
-                              'name': (product['name'] ?? 'No Name').toString(),
+                              'name': (product['product_name'] ?? 'No Name')
+                                  .toString(),
                               'price': (product['price'] ?? '0').toString(),
                               'image': (product['image'] ?? '').toString(),
                               'id': (product['id'] ?? '').toString(),
@@ -252,103 +249,84 @@ class _SuspensionDetailsScreenState extends State<SuspensionDetailsScreen> {
                             final isFavorite =
                                 favoriteProvider.isFavorite(favoriteProduct);
 
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        SuspensionDetailsInside(
-                                      productName: product['name'] ?? 'No Name',
-                                      productPrice: '${product['price']} USD',
-                                      productImage: product['image'] ?? '',
-                                      token: _token,
-                                      carMake: null,
+                            return Card(
+                              elevation: 2,
+                              color: _cardColors[index % _cardColors.length],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.contain,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Container(
+                                              color: Colors.grey[200],
+                                              child: Center(
+                                                child: Icon(Icons.broken_image,
+                                                    size: 10,
+                                                    color: Colors.grey),
+                                              ),
+                                            );
+                                          },
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: Text(
+                                          '${product['price']} USD',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Positioned(
+                                    bottom: 8,
+                                    right: 2,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        isFavorite
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        favoriteProvider
+                                            .toggleFavorite(favoriteProduct);
+                                      },
                                     ),
                                   ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 2,
-                                color: _cardColors[index % _cardColors.length],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Image.network(
-                                            imageUrl,
-                                            fit: BoxFit.contain,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Container(
-                                                color: Colors.grey[200],
-                                                child: Center(
-                                                  child: Icon(
-                                                      Icons.broken_image,
-                                                      size: 10,
-                                                      color: Colors.grey),
-                                                ),
-                                              );
-                                            },
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  value: loadingProgress
-                                                              .expectedTotalBytes !=
-                                                          null
-                                                      ? loadingProgress
-                                                              .cumulativeBytesLoaded /
-                                                          loadingProgress
-                                                              .expectedTotalBytes!
-                                                      : null,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          child: Text(
-                                            '${product['price']} USD',
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Positioned(
-                                      bottom: 8,
-                                      right: 2,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          isFavorite
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          favoriteProvider
-                                              .toggleFavorite(favoriteProduct);
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             );
                           },

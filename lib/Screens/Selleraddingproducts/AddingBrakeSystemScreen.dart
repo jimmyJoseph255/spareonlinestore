@@ -7,15 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' show MultipartRequest, MultipartFile;
 import 'package:myproject/Screens/widgets/SuccessScreen.dart';
 
-class ChooseBrakeSystemDetails extends StatefulWidget {
-  const ChooseBrakeSystemDetails({super.key});
+class AddingBrakeSystemScreen extends StatefulWidget {
+  const AddingBrakeSystemScreen({super.key});
 
   @override
-  _ChooseBrakeSystemDetailsState createState() =>
-      _ChooseBrakeSystemDetailsState();
+  _AddingBrakeSystemScreenState createState() =>
+      _AddingBrakeSystemScreenState();
 }
 
-class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
+class _AddingBrakeSystemScreenState extends State<AddingBrakeSystemScreen> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
@@ -37,7 +37,7 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
   final List<String> _yearOptions =
       List.generate(30, (index) => '${2025 - index}');
   final List<String> _brakeTypeOptions = ['disc', 'drum'];
-  final List<String> _positionOptions = ['front', 'rear', 'universal'];
+  final List<String> _positionOptions = ['front', 'rear', 'parking'];
   final List<String> _padMaterialOptions = [
     'ceramic',
     'organic',
@@ -49,11 +49,31 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
   final List<String> _rotorThicknessOptions =
       List.generate(15, (index) => '${5 + index}');
   final List<String> _pistonCountOptions = ['1', '2', '3', '4', '6', '8'];
-  final List<String> _brakeFluidOptions = ['DOT3', 'DOT4', 'DOT5', 'DOT5.1'];
+  final List<String> _brakeFluidOptions = ['DOT3', 'DOT4', 'DOT5.1'];
   final List<String> _priceOptions =
       List.generate(20, (index) => '${(index + 1) * 10000}');
   final List<String> _stockOptions =
       List.generate(20, (index) => '${index + 1}');
+
+  // Category part options
+  final List<String> _categoryPartOptions = [
+    'BrakePads',
+    'BrakeFluids',
+    'BrakeRotor',
+    'BrakeCaliper'
+  ];
+
+  // Brand options (common brake system brands)
+  final List<String> _brandOptions = [
+    'Brembo',
+    'Bosch',
+    'Akebono',
+    'TRW',
+    'ATE',
+    'Raybestos',
+    'Wagner',
+    'Centric',
+  ];
 
   String? _selectedMake,
       _selectedModel,
@@ -66,7 +86,9 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
       _selectedPistonCount,
       _selectedBrakeFluid,
       _selectedPrice,
-      _selectedStock;
+      _selectedStock,
+      _selectedCategoryPart,
+      _selectedBrand;
 
   bool _isAbsCompatible = false;
   File? _image;
@@ -94,7 +116,11 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
   }
 
   Future<void> _submitProduct() async {
-    if (_formKey.currentState!.validate() && _image != null && _token != null) {
+    if (_formKey.currentState!.validate() &&
+        _image != null &&
+        _token != null &&
+        _selectedCategoryPart != null &&
+        _selectedBrand != null) {
       try {
         showDialog(
           barrierDismissible: false,
@@ -128,12 +154,15 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
         request.fields['price'] = _selectedPrice!;
         request.fields['stock'] = _selectedStock!;
         request.fields['category_id'] = '3'; // Brake system category_id
+        request.fields['category_part'] = _selectedCategoryPart!;
+        request.fields['brand'] = _selectedBrand!;
 
         request.files.add(await MultipartFile.fromPath('image', _image!.path));
 
         var response = await request.send();
         final responseBody = await response.stream.bytesToString();
 
+        if (!mounted) return;
         Navigator.pop(context);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
@@ -151,6 +180,8 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
             _selectedBrakeFluid = null;
             _selectedPrice = null;
             _selectedStock = null;
+            _selectedCategoryPart = null;
+            _selectedBrand = null;
             _isAbsCompatible = false;
             _image = null;
           });
@@ -164,9 +195,11 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
               .showSnackBar(SnackBar(content: Text('Failed: $responseBody')));
         }
       } catch (e) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Error: $e')));
+        }
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -311,6 +344,16 @@ class _ChooseBrakeSystemDetailsState extends State<ChooseBrakeSystemDetails> {
                     validator: (v) => v == null ? 'Select brake fluid' : null),
                 _buildSwitch('ABS Compatible', _isAbsCompatible,
                     (v) => setState(() => _isAbsCompatible = v)),
+                _buildDropdown(
+                    'Category Part',
+                    _categoryPartOptions,
+                    _selectedCategoryPart,
+                    (v) => setState(() => _selectedCategoryPart = v),
+                    validator: (v) =>
+                        v == null ? 'Select category part' : null),
+                _buildDropdown('Brand', _brandOptions, _selectedBrand,
+                    (v) => setState(() => _selectedBrand = v),
+                    validator: (v) => v == null ? 'Select brand' : null),
                 _buildDropdown('Price (Tsh)', _priceOptions, _selectedPrice,
                     (v) => setState(() => _selectedPrice = v),
                     validator: (v) => v == null ? 'Select price' : null),

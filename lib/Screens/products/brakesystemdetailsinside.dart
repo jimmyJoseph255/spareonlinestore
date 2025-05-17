@@ -12,6 +12,8 @@ class BrakeSystemDetailsInside extends StatefulWidget {
     required this.productName,
     required this.productPrice,
     required this.productImage,
+    required Map<String, dynamic> product,
+    String? token,
   });
 
   @override
@@ -35,8 +37,20 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
     }
   }
 
+  String _getFullImageUrl(String imagePath) {
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    const String baseUrl = 'https://sparefasta.co.tz';
+    final String correctedPath =
+        imagePath.startsWith('/') ? imagePath : '/$imagePath';
+    return '$baseUrl$correctedPath';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String fullImageUrl = _getFullImageUrl(widget.productImage);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       appBar: AppBar(
@@ -44,13 +58,12 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
         backgroundColor: const Color.fromARGB(255, 67, 164, 243),
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          'Brake system Details',
+          'Brake System Details',
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         leading: GestureDetector(
           onTap: () {
-            // Silent back navigation when the back button is tapped
             Navigator.pop(context);
           },
           child:
@@ -65,9 +78,65 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
               style:
                   const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          Image.network(widget.productImage, height: 200, width: 200),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white.withOpacity(0.1),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                fullImageUrl,
+                height: 200,
+                width: 200,
+                fit: BoxFit.contain,
+                headers: const {
+                  'Accept': 'image/*',
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  debugPrint('Image load error: $error for URL: $fullImageUrl');
+                  return Container(
+                    height: 200,
+                    width: 200,
+                    color: Colors.grey[200],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.broken_image,
+                            size: 50, color: Colors.grey),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Image not available',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
-          Text(widget.productPrice,
+          Text('Price: ${widget.productPrice}',
               style: const TextStyle(
                   fontSize: 20,
                   color: Color.fromARGB(255, 0, 0, 0),
@@ -85,7 +154,6 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
                       borderRadius: BorderRadius.circular(10)),
                 ),
                 onPressed: () {
-                  // Add product to cart
                   cartItems.add({
                     'name': widget.productName,
                     'price': widget.productPrice,
@@ -121,27 +189,26 @@ class _BrakeSystemDetailsInsideState extends State<BrakeSystemDetailsInside> {
         selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
         unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
         showUnselectedLabels: true,
-        //backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+            backgroundColor: Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+            backgroundColor: Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+            backgroundColor: Color.fromARGB(255, 67, 164, 243),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Account',
-            backgroundColor: const Color.fromARGB(255, 67, 164, 243),
+            backgroundColor: Color.fromARGB(255, 67, 164, 243),
           ),
         ],
       ),

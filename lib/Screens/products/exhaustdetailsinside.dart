@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myproject/Screens/Dashboard/DashboardScreen.dart';
 import 'package:myproject/Screens/cart/cart_screen.dart';
 import 'package:myproject/Screens/widgets/shared_data.dart';
 
-class SuspensionDetailsInside extends StatelessWidget {
+class ExhaustDetailsInside extends StatelessWidget {
   final String productName;
   final String productPrice;
   final String productImage;
 
-  const SuspensionDetailsInside({
+  const ExhaustDetailsInside({
     super.key,
     required this.productName,
     required this.productPrice,
     required this.productImage,
     String? token,
-    required carMake,
   });
 
   @override
@@ -33,7 +31,7 @@ class SuspensionDetailsInside extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 67, 164, 243),
       iconTheme: const IconThemeData(color: Colors.black),
       title: Text(
-        'Suspension Details',
+        'Exhaust Details',
         style: GoogleFonts.lato(
           fontSize: 17,
           fontWeight: FontWeight.bold,
@@ -53,88 +51,12 @@ class SuspensionDetailsInside extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
-        Text(
-          productName,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 10),
         _buildProductImage(),
         const SizedBox(height: 20),
         _buildProductPrice(),
         const Spacer(),
         _buildAddToCartButton(context),
       ],
-    );
-  }
-
-  Widget _buildProductImage() {
-    if (productImage.startsWith('http')) {
-      return _buildNetworkImage(productImage);
-    }
-
-    const String baseUrl = 'https://sparefasta.co.tz';
-    final String imagePath =
-        productImage.startsWith('/') ? productImage : '/$productImage';
-    final String fullImageUrl = '$baseUrl$imagePath';
-
-    return _buildNetworkImage(fullImageUrl);
-  }
-
-  Widget _buildNetworkImage(String imageUrl) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withOpacity(0.1),
-      ),
-      padding: const EdgeInsets.all(8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          imageUrl,
-          height: 200,
-          width: 200,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              height: 200,
-              width: 200,
-              color: Colors.grey[200],
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Image not available',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return SizedBox(
-              height: 200,
-              width: 200,
-              child: Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
     );
   }
 
@@ -193,6 +115,78 @@ class SuspensionDetailsInside extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CartScreen()),
+    );
+  }
+
+  Widget _buildProductImage() {
+    if (productImage.startsWith('http')) {
+      return _buildNetworkImage(productImage);
+    }
+
+    final String baseUrl = 'https://sparefasta.co.tz';
+    final String imagePath =
+        productImage.startsWith('/') ? productImage : '/$productImage';
+    final String fullImageUrl = '$baseUrl$imagePath';
+
+    return _buildNetworkImage(fullImageUrl);
+  }
+
+  Widget _buildNetworkImage(String imageUrl) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withOpacity(0.1),
+      ),
+      padding: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          imageUrl,
+          height: 200,
+          width: 200,
+          fit: BoxFit.contain,
+          headers: const {
+            'Accept': 'image/*',
+          },
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Image load error: $error for URL: $imageUrl');
+            return Container(
+              height: 200,
+              width: 200,
+              color: Colors.grey[200],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Image not available',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return SizedBox(
+              height: 200,
+              width: 200,
+              child: Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

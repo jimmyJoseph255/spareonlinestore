@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myproject/Screens/Selleraddingproducts/AddingCarTyresScreen%20.dart';
-import 'package:myproject/Screens/Selleraddingproducts/CarBaterries.dart';
+import 'package:myproject/Screens/Selleraddingproducts/AddingSpeakersScreen.dart';
+import 'package:myproject/Screens/Selleraddingproducts/AddingCarBaterries.dart';
 
-import 'package:myproject/Screens/Selleraddingproducts/ClutchScreen.dart'; // Import the ClutchScreen
-import 'package:myproject/Screens/Selleraddingproducts/BrakeSystemScreen.dart'; // Import the BrakeSystemScreen
+import 'package:myproject/Screens/Selleraddingproducts/AddingClutchScreen.dart'; // Import the ClutchScreen
+import 'package:myproject/Screens/Selleraddingproducts/AddingBrakeSystemScreen.dart'; // Import the BrakeSystemScreen
 import 'package:myproject/Screens/Selleraddingproducts/AddingEngineScreen.dart'; // Import the EngineScreen
 import 'package:myproject/Screens/Selleraddingproducts/AddingSideMirrorScreen.dart';
-import 'package:myproject/Screens/Selleraddingproducts/Suspensions.dart'; // Import the SideMirrorScreen
+import 'package:myproject/Screens/Selleraddingproducts/Suspensions.dart';
+import 'package:myproject/Screens/Selleraddingproducts/sellerAddingExhaust.dart'; // Import the SideMirrorScreen
 
 class AddProductScreen extends StatelessWidget {
   const AddProductScreen({super.key});
@@ -120,7 +122,7 @@ class AddProductScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => BrakeSystemScreen()),
+                              builder: (context) => SpeakerScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -140,7 +142,7 @@ class AddProductScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Brake System",
+                      "speakers",
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -163,7 +165,7 @@ class AddProductScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EngineScreen()),
+                              builder: (context) => AddingBrakeSystemScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -182,7 +184,7 @@ class AddProductScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Engine",
+                      "Brake system",
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -272,7 +274,7 @@ class AddProductScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EngineScreen()),
+                              builder: (context) => AddExhaustScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -291,7 +293,7 @@ class AddProductScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Engine",
+                      "Exhaust",
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,

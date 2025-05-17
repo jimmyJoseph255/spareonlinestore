@@ -11,6 +11,7 @@ import 'package:myproject/Screens/ChooseProduct/ChooseSpeakerDetails.dart';
 import 'package:myproject/Screens/ChooseProduct/choosetyredetails.dart';
 import 'package:myproject/Screens/products/SideMirrorDetailsScreen.dart';
 import 'package:myproject/Screens/products/SuspensionsDetailsScreen.dart';
+import 'package:myproject/Screens/products/exhaustdetails.dart';
 
 import '../products/BrakeDetailsScreen.dart';
 
@@ -55,6 +56,8 @@ class CategoryScreen extends StatelessWidget {
       'color': Colors.deepOrange
     },
   ];
+
+  CategoryScreen({super.key});
 
   // Function to build the carousel slider
   Widget _buildCarouselSlider(BuildContext context) {
@@ -250,8 +253,7 @@ class CategoryScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChooseBrakeSystemDetails(),
+                                  builder: (context) => BrakeDetailsScreen(),
                                 ),
                               );
                             } else if (category['name'] == 'Engine') {
@@ -274,6 +276,13 @@ class CategoryScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       ChooseCarBatteryDetails(),
+                                ),
+                              );
+                            } else if (category['name'] == 'Exhaust') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExhaustDetailsScreen(),
                                 ),
                               );
                             } else if (category['name'] == 'Suspension') {
